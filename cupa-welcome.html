@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>致 26fall 宣传部新成员 · CUPA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Serif+SC:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a1614;
+      --ink-soft: #3d3530;
+      --paper: #f7f3ec;
+      --mist: #e8eef2;
+      --sky: #c5d6e0;
+      --maroon: #7a1f2b;
+      --maroon-deep: #5c1520;
+      --coral: #c45c48;
+      --sand: #d4c4a8;
+      --foam: #faf8f4;
+      --line: rgba(26, 22, 20, 0.12);
+      --shadow-soft: 0 18px 50px rgba(26, 22, 20, 0.08);
+      --radius: 18px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --font-display: "Instrument Serif", "Noto Serif SC", serif;
+      --font-cn: "Noto Serif SC", "Songti SC", serif;
+      --font-ui: "Outfit", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-ui);
+      color: var(--ink);
+      background: var(--paper);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    img { max-width: 100%; display: block; }
+    button, input { font: inherit; }
+    a { color: inherit; }
+
+    /* ---------- Curtain ---------- */
+    .curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, #9eb8c8 0%, transparent 55%),
+        linear-gradient(165deg, #d9e6ee 0%, #f0ebe3 45%, #e4d5c2 100%);
+      transition: opacity 0.9s var(--ease), visibility 0.9s;
+    }
+    .curtain.is-gone {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .curtain-inner {
+      text-align: center;
+      max-width: 34rem;
+      padding: 2rem;
+      transform: translateY(12px);
+      animation: riseIn 1.1s var(--ease) forwards;
+    }
+    .curtain-brand {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 8vw, 4.6rem);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--maroon-deep);
+    }
+    .curtain-sub {
+      margin-top: 0.85rem;
+      font-family: var(--font-cn);
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+    }
+    .curtain-hint {
+      margin-top: 1.6rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      opacity: 0.7;
+    }
+    .enter-btn {
+      margin-top: 2rem;
+      appearance: none;
+      border: none;
+      background: var(--maroon);
+      color: var(--foam);
+      padding: 0.95rem 2.1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: transform 0.35s var(--ease), background 0.35s;
+    }
+    .enter-btn:hover { transform: translateY(-2px); background: var(--maroon-deep); }
+
+    /* ---------- Progress ---------- */
+    .journey-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      z-index: 900;
+      background: transparent;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .journey-bar.is-on { opacity: 1; }
+    .journey-bar > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--coral), var(--maroon));
+      transition: width 0.35s var(--ease);
+    }
+    .stamp-dock {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 850;
+      display: none;
+      gap: 0.4rem;
+      align-items: center;
+      padding: 0.55rem 0.75rem;
+      background: rgba(247, 243, 236, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+    .stamp-dock.is-on { display: flex; }
+    .stamp-dots { display: flex; gap: 0.28rem; }
+    .stamp-dots i {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 1.5px solid var(--maroon);
+      background: transparent;
+      transition: background 0.3s;
+    }
+    .stamp-dots i.on { background: var(--maroon); }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      min-height: 100svh;
+      position: relative;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: var(--foam);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(26,22,20,0.15) 0%, rgba(26,22,20,0.55) 55%, rgba(26,22,20,0.82) 100%),
+        radial-gradient(ellipse 70% 50% at 70% 25%, rgba(196,92,72,0.35), transparent 50%),
+        linear-gradient(135deg, #6b8fa3 0%, #8a6b5a 40%, #7a1f2b 100%);
+      transform: scale(1.05);
+      transition: transform 0.1s linear;
+    }
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      opacity: 0.18;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: clamp(2rem, 6vw, 4.5rem);
+      padding-bottom: clamp(3rem, 8vw, 5.5rem);
+      max-width: 52rem;
+    }
+    .hero-brand {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 11vw, 6.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.1rem;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: riseIn 1s 0.2s var(--ease) forwards;
+    }
+    .hero-brand span {
+      display: block;
+      font-family: var(--font-cn);
+      font-size: 0.28em;
+      letter-spacing: 0.18em;
+      font-weight: 600;
+      margin-top: 0.55rem;
+      opacity: 0.9;
+    }
+    .hero-line {
+      font-family: var(--font-cn);
+      font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+      font-weight: 600;
+      max-width: 22ch;
+      margin-bottom: 0.75rem;
+      opacity: 0;
+      animation: riseIn 1s 0.4s var(--ease) forwards;
+    }
+    .hero-support {
+      font-size: 1rem;
+      opacity: 0.85;
+      max-width: 36ch;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: riseIn 1s 0.55s var(--ease) forwards;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--foam);
+      color: var(--ink);
+      text-decoration: none;
+      padding: 0.9rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 500;
+      opacity: 0;
+      animation: riseIn 1s 0.7s var(--ease) forwards;
+      transition: transform 0.3s var(--ease);
+    }
+    .hero-cta:hover { transform: translateY(-2px); }
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    /* ---------- Sections common ---------- */
+    .section {
+      padding: clamp(3.5rem, 9vw, 7rem) clamp(1.25rem, 5vw, 4rem);
+      position: relative;
+    }
+    .section-narrow { max-width: 72rem; margin: 0 auto; }
+    .eyebrow {
+      font-family: var(--font-ui);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 0.75rem;
+    }
+    .h2 {
+      font-family: var(--font-cn);
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+    .lede {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 40rem;
+      margin-bottom: 2rem;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    }
+    .reveal.is-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ---------- Dialogue ---------- */
+    .dialogue {
+      background:
+        radial-gradient(ellipse 60% 40% at 10% 0%, rgba(197, 214, 224, 0.55), transparent 55%),
+        var(--paper);
+    }
+    .chat {
+      display: grid;
+      gap: 1rem;
+      max-width: 40rem;
+    }
+    .bubble {
+      padding: 1rem 1.2rem;
+      border-radius: 18px 18px 18px 4px;
+      background: var(--foam);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      max-width: 92%;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s, transform 0.5s var(--ease);
+    }
+    .bubble.is-show { opacity: 1; transform: none; }
+    .bubble.from-b {
+      justify-self: end;
+      border-radius: 18px 18px 4px 18px;
+      background: #efe6da;
+    }
+    .bubble .who {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--maroon);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+    .bubble .txt { font-family: var(--font-cn); font-size: 1.02rem; }
+    .cursor-blink::after {
+      content: "▍";
+      animation: blink 0.9s step-end infinite;
+      color: var(--coral);
+    }
+    .chat-actions {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .chip-btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: transparent;
+      padding: 0.65rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .chip-btn:hover, .chip-btn.is-picked {
+      background: var(--maroon);
+      border-color: var(--maroon);
+      color: var(--foam);
+    }
+    .chip-btn:disabled { opacity: 0.45; cursor: default; }
+
+    /* ---------- Quiz ---------- */
+    .quiz {
+      background:
+        linear-gradient(180deg, #ebe4d8 0%, var(--paper) 30%, #e8eef2 100%);
+    }
+    .quiz-shell {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 900px) {
+      .quiz-shell { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+    }
+    .quiz-card {
+      background: var(--foam);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 280px;
+    }
+    .q-progress {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+    .q-title {
+      font-family: var(--font-cn);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.1rem;
+    }
+    .options { display: grid; gap: 0.65rem; }
+    .opt {
+      text-align: left;
+      appearance: none;
+      border: 1px solid var(--line);
+      background: transparent;
+      padding: 0.9rem 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
+    }
+    .opt:hover { border-color: var(--maroon); transform: translateX(4px); }
+    .opt.is-correct {
+      background: rgba(122, 31, 43, 0.08);
+      border-color: var(--maroon);
+    }
+    .opt.is-wrong {
+      background: rgba(196, 92, 72, 0.1);
+      border-color: var(--coral);
+    }
+    .quiz-side {
+      padding: 1.25rem 0;
+    }
+    .score-ring {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 1.2rem;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        conic-gradient(var(--maroon) calc(var(--p, 0) * 1%), rgba(26,22,20,0.08) 0);
+      position: relative;
+    }
+    .score-ring::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: var(--paper);
+    }
+    .score-ring strong {
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+    }
+    .score-msg {
+      text-align: center;
+      font-family: var(--font-cn);
+      color: var(--ink-soft);
+      min-height: 3.2em;
+    }
+    .quiz-feedback {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-left: 3px solid var(--coral);
+      background: rgba(255,255,255,0.45);
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      min-height: 3.5em;
+    }
+
+    /* ---------- Flip ---------- */
+    .flips {
+      background: var(--mist);
+    }
+    .flip-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 700px) {
+      .flip-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .flip {
+      perspective: 1200px;
+      height: 220px;
+      cursor: pointer;
+    }
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s var(--ease);
+      transform-style: preserve-3d;
+    }
+    .flip.is-flipped .flip-inner { transform: rotateY(180deg); }
+    .face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--line);
+    }
+    .face-front {
+      background: linear-gradient(160deg, #faf8f4, #e7dccb);
+    }
+    .face-back {
+      background: linear-gradient(160deg, var(--maroon), #4a121c);
+      color: var(--foam);
+      transform: rotateY(180deg);
+    }
+    .face .num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      opacity: 0.45;
+    }
+    .face h3 {
+      font-family: var(--font-cn);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .face p { font-size: 0.95rem; opacity: 0.92; }
+    .face .tap {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      opacity: 0.55;
+    }
+
+    /* ---------- Single memory photo ---------- */
+    .memory {
+      background:
+        radial-gradient(ellipse 50% 40% at 80% 10%, rgba(196,92,72,0.12), transparent 50%),
+        var(--paper);
+    }
+    .photo-frame {
+      margin-top: 0.5rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--foam);
+      max-width: 860px;
+    }
+    .mem-visual {
+      aspect-ratio: 16 / 10;
+      background:
+        linear-gradient(180deg, rgba(26,22,20,0.25), rgba(26,22,20,0.55)),
+        linear-gradient(135deg, #6d8a9a, #a67c5d 55%, #7a1f2b);
+      display: grid;
+      place-items: center;
+      color: var(--foam);
+      text-align: center;
+      padding: 1rem;
+      position: relative;
+    }
+    .mem-visual .ph {
+      font-family: var(--font-cn);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      max-width: 22ch;
+    }
+    .mem-visual img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .mem-visual.has-media .ph { display: none; }
+    .mem-caption {
+      padding: 1.15rem 1.25rem 1.4rem;
+    }
+    .mem-caption h3 {
+      font-family: var(--font-cn);
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+    }
+    .mem-caption p {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      max-width: 40rem;
+    }
+
+    /* ---------- Stamp hunt ---------- */
+    .hunt {
+      background: linear-gradient(180deg, #e8eef2, #f7f3ec);
+    }
+    .hunt-board {
+      position: relative;
+      min-height: 320px;
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px dashed rgba(122, 31, 43, 0.35);
+      background:
+        radial-gradient(circle at 20% 30%, rgba(197,214,224,0.7), transparent 40%),
+        radial-gradient(circle at 75% 60%, rgba(212,196,168,0.55), transparent 45%),
+        var(--foam);
+      overflow: hidden;
+    }
+    .spot {
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      background: rgba(122, 31, 43, 0.08);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--maroon);
+      transition: transform 0.35s var(--ease), background 0.35s, border-color 0.35s;
+      animation: pulseSoft 2.8s ease-in-out infinite;
+    }
+    .spot:hover { transform: scale(1.08); }
+    .spot.is-got {
+      background: var(--maroon);
+      color: var(--foam);
+      border-color: var(--maroon);
+      animation: none;
+      transform: scale(1);
+    }
+    .spot:nth-child(1) { left: 12%; top: 22%; animation-delay: 0s; }
+    .spot:nth-child(2) { left: 48%; top: 48%; animation-delay: 0.4s; }
+    .spot:nth-child(3) { left: 72%; top: 18%; animation-delay: 0.8s; }
+    .spot:nth-child(4) { left: 28%; top: 68%; animation-delay: 1.1s; }
+    .hunt-status {
+      margin-top: 1rem;
+      font-family: var(--font-cn);
+      color: var(--ink-soft);
+    }
+
+    /* ---------- Final blessing ---------- */
+    .finale {
+      background:
+        linear-gradient(180deg, var(--paper) 0%, #1a1614 42%);
+      color: var(--foam);
+      padding-bottom: 5rem;
+    }
+    .finale .eyebrow { color: var(--sand); }
+    .finale .h2 { color: var(--foam); }
+    .finale .lede { color: rgba(250, 248, 244, 0.75); }
+    .finale-lock {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      border: 1px dashed rgba(250,248,244,0.25);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.03);
+    }
+    .finale-lock p {
+      font-family: var(--font-cn);
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+    .media-switch {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .media-switch button {
+      appearance: none;
+      border: 1px solid rgba(250,248,244,0.25);
+      background: transparent;
+      color: var(--foam);
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.25s, background 0.25s, border-color 0.25s;
+    }
+    .media-switch button.is-on {
+      opacity: 1;
+      background: rgba(250,248,244,0.12);
+      border-color: rgba(250,248,244,0.5);
+    }
+    .media-stage { display: none; }
+    .media-stage.is-on { display: block; }
+    .photo-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 760px) {
+      .photo-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .media-slot {
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      border: 1px solid rgba(250,248,244,0.18);
+      background:
+        linear-gradient(135deg, rgba(122,31,43,0.45), rgba(26,22,20,0.3)),
+        linear-gradient(120deg, #4a5d6a, #7a5a48);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .media-slot video,
+    .media-slot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .slot-label {
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-cn);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      max-width: 22ch;
+      opacity: 0.92;
+    }
+    .media-slot.has-media .slot-label { display: none; }
+    .video-slot { max-width: 860px; margin: 0 auto; }
+    .names-row {
+      margin-top: 1.75rem;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 700px) {
+      .names-row { grid-template-columns: 1fr 1fr; }
+    }
+    .name-card {
+      padding: 1.25rem 1.4rem;
+      border-top: 1px solid rgba(250,248,244,0.2);
+    }
+    .name-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      margin-bottom: 0.2rem;
+    }
+    .name-card .cn {
+      font-family: var(--font-cn);
+      font-size: 1rem;
+      opacity: 0.85;
+      margin-bottom: 0.55rem;
+    }
+    .name-card p {
+      font-size: 0.92rem;
+      opacity: 0.72;
+    }
+    .handoff {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(250,248,244,0.15);
+      font-family: var(--font-cn);
+      font-size: 1.05rem;
+      opacity: 0.8;
+      max-width: 36rem;
+    }
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1200;
+      overflow: hidden;
+    }
+    .confetti i {
+      position: absolute;
+      top: -12px;
+      width: 8px;
+      height: 12px;
+      opacity: 0.9;
+      animation: fall linear forwards;
+    }
+
+    footer {
+      background: #1a1614;
+      color: rgba(250,248,244,0.45);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+    }
+
+    @keyframes riseIn {
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    @keyframes pulseSoft {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(122,31,43,0.25); }
+      50% { box-shadow: 0 0 0 12px rgba(122,31,43,0); }
+    }
+    @keyframes fall {
+      to { transform: translateY(105vh) rotate(420deg); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Opening curtain -->
+  <div class="curtain" id="curtain" role="dialog" aria-label="开场">
+    <div class="curtain-inner">
+      <div class="curtain-brand">CUPA</div>
+      <p class="curtain-sub">香港城市大学研究生会宣传部<br />一封写给 26fall 新成员的神秘祝福</p>
+      <p class="curtain-hint">click to unfold</p>
+      <button class="enter-btn" id="enterBtn" type="button">迫不及待地点开（搓手手）</button>
+    </div>
+  </div>
+
+  <div class="journey-bar" id="journeyBar" aria-hidden="true"><span></span></div>
+  <div class="stamp-dock" id="stampDock" aria-live="polite">
+    探索进度
+    <div class="stamp-dots" id="stampDots">
+      <i data-k="chat"></i>
+      <i data-k="quiz"></i>
+      <i data-k="flip"></i>
+      <i data-k="photo"></i>
+      <i data-k="hunt"></i>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <main id="main" hidden>
+    <!-- Hero -->
+    <header class="hero" id="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-grain"></div>
+      <div class="hero-content">
+        <h1 class="hero-brand">
+          CUPA
+          <span>宣传部 · 26fall</span>
+        </h1>
+        <p class="hero-line">欢迎加入这场「认真地不正经」的宣传宇宙。</p>
+        <p class="hero-support">Andy 与 Rebecca 写给你们的初次见面信。点一点、滑一滑、答一答——一幅画卷等待大家展开。</p>
+        <a class="hero-cta" href="#dialogue">
+          我要看我要看
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- Dialogue -->
+    <section class="section dialogue" id="dialogue">
+      <div class="section-narrow reveal">
+        <p class="eyebrow">01 · Typewriter</p>
+        <h2 class="h2">先假装这是一场深夜对谈</h2>
+        <p class="lede">宣传部的夜晚通常这样开始：有人说「我改完啦」，另一人说「再调一点位置」。</p>
+        <div class="chat" id="chat" aria-live="polite"></div>
+        <div class="chat-actions" id="chatActions" hidden>
+          <button class="chip-btn" type="button" data-reply="a">我已经准备好「再改一版」了</button>
+          <button class="chip-btn" type="button" data-reply="b">请先告诉我截止时间在哪</button>
+          <button class="chip-btn" type="button" data-reply="c">抽象一点也没关系，我能接住</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="section quiz" id="quiz">
+      <div class="section-narrow">
+        <div class="reveal">
+          <p class="eyebrow">02 · Soft quiz</p>
+          <h2 class="h2">宣传部人格小测（不计分，但会偷偷计分）</h2>
+          <p class="lede">没有标准答案。只有「看起来像宣传部的答案」和「更像宣传部的答案」。</p>
+        </div>
+        <div class="quiz-shell reveal">
+          <div class="quiz-card">
+            <p class="q-progress" id="qProgress">问题 1 / 4</p>
+            <h3 class="q-title" id="qTitle"></h3>
+            <div class="options" id="qOptions"></div>
+            <div class="quiz-feedback" id="qFeedback">点选一个选项，看看我们会不会笑出声。</div>
+          </div>
+          <aside class="quiz-side">
+            <div class="score-ring" id="scoreRing" style="--p:0"><strong id="scoreNum">0</strong></div>
+            <p class="score-msg" id="scoreMsg">抽象值初始化中……</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flip cards -->
+    <section class="section flips" id="flips">
+      <div class="section-narrow">
+        <div class="reveal">
+          <p class="eyebrow">03 · Flip</p>
+          <h2 class="h2">三张可以翻开的祝福卡</h2>
+          <p class="lede">正面是场面话，背面是真心话。宣传部精通这两种语言。</p>
+        </div>
+        <div class="flip-grid reveal" id="flipGrid">
+          <article class="flip" tabindex="0" role="button" aria-label="翻转祝福卡 1">
+            <div class="flip-inner">
+              <div class="face face-front">
+                <span class="num">01</span>
+                <h3>愿你永远赶上 deadline</h3>
+                <span class="tap">点击翻转</span>
+              </div>
+              <div class="face face-back">
+                <span class="num">01</span>
+                <p>其实我们更希望：你偶尔错过一次，然后发现队友会接住你。宣传部不是一个人的 Photoshop。</p>
+              </div>
+            </div>
+          </article>
+          <article class="flip" tabindex="0" role="button" aria-label="翻转祝福卡 2">
+            <div class="flip-inner">
+              <div class="face face-front">
+                <span class="num">02</span>
+                <h3>愿你的审美保持轻微偏执</h3>
+                <span class="tap">点击翻转</span>
+              </div>
+              <div class="face face-back">
+                <span class="num">02</span>
+                <p>偏执一点没关系。把字距再挪 0.5px 的人，往往也是把气氛撑起来的人。</p>
+              </div>
+            </div>
+          </article>
+          <article class="flip" tabindex="0" role="button" aria-label="翻转祝福卡 3">
+            <div class="flip-inner">
+              <div class="face face-front">
+                <span class="num">03</span>
+                <h3>愿你在 CUPA 留下痕迹</h3>
+                <span class="tap">点击翻转</span>
+              </div>
+              <div class="face face-back">
+                <span class="num">03</span>
+                <p>痕迹可以是一张爆款推文，也可以是群里凌晨两点的「我来」。抽象，但真实。</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Memory photo -->
+    <section class="section memory" id="memory">
+      <div class="section-narrow">
+        <div class="reveal">
+          <p class="eyebrow">04 · Photo</p>
+          <h2 class="h2">一张合影</h2>
+          <p class="lede">CUPA 25fall 就职典礼后，宣传部的聚餐合影。</p>
+        </div>
+        <article class="photo-frame reveal" id="photoFrame">
+          <div class="mem-visual" id="groupPhotoSlot">
+            <p class="ph">请把 photo.jpg 放到与本页面同一目录</p>
+          </div>
+          <div class="mem-caption">
+            <h3>我们先吃饭再并肩</h3>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Stamp hunt -->
+    <section class="section hunt" id="hunt">
+      <div class="section-narrow">
+        <div class="reveal">
+          <p class="eyebrow">05 · Collect</p>
+          <h2 class="h2">收集四枚「部门印章」</h2>
+          <p class="lede">点亮它们。全部点亮后，终章的照片 / 视频位才会正式解锁——仪式感这件事，宣传部懂。</p>
+        </div>
+        <div class="hunt-board reveal" id="huntBoard">
+          <button class="spot" type="button" data-stamp="灵感" aria-label="收集印章：灵感">灵</button>
+          <button class="spot" type="button" data-stamp="协作" aria-label="收集印章：协作">协</button>
+          <button class="spot" type="button" data-stamp="审美" aria-label="收集印章：审美">美</button>
+          <button class="spot" type="button" data-stamp="交付" aria-label="收集印章：交付">交</button>
+        </div>
+        <p class="hunt-status" id="huntStatus">已收集 0 / 4</p>
+      </div>
+    </section>
+
+    <!-- Finale -->
+    <section class="section finale" id="finale">
+      <div class="section-narrow">
+        <div class="reveal">
+          <p class="eyebrow">06 · Blessing</p>
+          <h2 class="h2">神秘祝福</h2>
+          <p class="lede">Andy · 邴建皓 与 Rebecca · 余朴华，上一届宣传部的位负责人，把祝福留给 26fall 的你们。</p>
+        </div>
+
+        <div class="finale-lock reveal" id="finaleLock">
+          <p>终章暂未解锁。<br />请先完成上方互动（尤其是四枚印章）。</p>
+        </div>
+
+        <div id="finaleContent" hidden>
+          <div class="media-switch" role="tablist" aria-label="媒体形式">
+            <button type="button" class="is-on" data-mode="photos" role="tab" aria-selected="true">双照片模式</button>
+            <button type="button" data-mode="video" role="tab" aria-selected="false">祝福视频模式</button>
+          </div>
+
+          <div class="media-stage is-on" id="stagePhotos" role="tabpanel">
+            <div class="photo-grid">
+              <div class="media-slot" id="photoAndy">
+                <!-- <img src="andy.jpg" alt="Andy 邴建皓" /> -->
+                <p class="slot-label">Andy · 邴建皓<br />横图照片位 · andy.jpg</p>
+              </div>
+              <div class="media-slot" id="photoRebecca">
+                <!-- <img src="rebecca.jpg" alt="Rebecca 余朴华" /> -->
+                <p class="slot-label">Rebecca · 余朴华<br />横图照片位 · rebecca.jpg</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="media-stage" id="stageVideo" role="tabpanel">
+            <div class="media-slot video-slot" id="videoSlot">
+              <!-- <video src="blessing.mp4" controls playsinline></video> -->
+              <p class="slot-label">祝福视频位 · blessing.mp4<br />横屏推荐 · 可替换为你们的录音+画面</p>
+            </div>
+          </div>
+
+          <div class="names-row">
+            <div class="name-card">
+              <h3>Andy</h3>
+              <p class="cn">邴建皓</p>
+              <p>祝福位</p>
+            </div>
+            <div class="name-card">
+              <h3>Rebecca</h3>
+              <p class="cn">余朴华</p>
+              <p>祝福位</p>
+            </div>
+          </div>
+
+          <p class="handoff">
+            也谢谢现任负责人 Judy · 刘若萱 与 Charles · 刘博文，把招新的火传了下去。
+            26fall 的新成员们：从现在起，CUPA 宣传部的下一屏，由你们来排版。
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="pageFooter" hidden>CUPA 宣传部 · 25 致 26fall</footer>
+
+  <script>
+    (() => {
+      const state = {
+        stamps: { chat: false, quiz: false, flip: false, photo: false, hunt: false },
+        huntCount: 0,
+        quizScore: 0,
+        quizIndex: 0,
+        flipped: 0,
+        unlocked: false,
+      };
+
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+      const curtain = $("#curtain");
+      const enterBtn = $("#enterBtn");
+      const main = $("#main");
+      const journeyBar = $("#journeyBar");
+      const stampDock = $("#stampDock");
+      const pageFooter = $("#pageFooter");
+
+      enterBtn.addEventListener("click", () => {
+        curtain.classList.add("is-gone");
+        main.hidden = false;
+        pageFooter.hidden = false;
+        journeyBar.classList.add("is-on");
+        stampDock.classList.add("is-on");
+        document.body.style.overflow = "";
+        setTimeout(() => curtain.remove(), 1000);
+        initReveal();
+        startChat();
+      });
+
+      /* Progress bar */
+      window.addEventListener("scroll", () => {
+        const h = document.documentElement;
+        const max = h.scrollHeight - h.clientHeight;
+        const p = max > 0 ? (h.scrollTop / max) * 100 : 0;
+        journeyBar.querySelector("span").style.width = p + "%";
+      }, { passive: true });
+
+      /* Hero parallax */
+      const heroBg = $("#heroBg");
+      window.addEventListener("scroll", () => {
+        if (!heroBg) return;
+        const y = Math.min(window.scrollY, 600);
+        heroBg.style.transform = `scale(1.05) translateY(${y * 0.18}px)`;
+      }, { passive: true });
+
+      function markStamp(key) {
+        if (state.stamps[key]) return;
+        state.stamps[key] = true;
+        const dot = $(`#stampDots i[data-k="${key}"]`);
+        if (dot) dot.classList.add("on");
+        maybeUnlock();
+      }
+
+      function maybeUnlock() {
+        const ready = Object.values(state.stamps).every(Boolean);
+        if (!ready || state.unlocked) return;
+        state.unlocked = true;
+        $("#finaleLock").hidden = true;
+        $("#finaleContent").hidden = false;
+        burstConfetti();
+      }
+
+      /* Reveal on scroll */
+      function initReveal() {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("is-in");
+          });
+        }, { threshold: 0.12 });
+        $$(".reveal").forEach((el) => io.observe(el));
+      }
+
+      /* Chat */
+      const lines = [
+        { who: "Andy", side: "", text: "咳咳，麦克风有人吗？这是写给 26fall 宣传部新成员的非官方欢迎仪式。" },
+        { who: "Rebecca", side: "from-b", text: "官方的已经招完了。我们负责把气氛做抽象一点。" },
+        { who: "Andy", side: "", text: "宣传部三件套：审美、截止时间、以及「再改一版会更香」。" },
+        { who: "Rebecca", side: "from-b", text: "还有第四件：队友。没有队友，审美会变成孤岛。" },
+        { who: "Andy", side: "", text: "轮到你选一句开场白——点下面任意按钮，对话才会继续。" },
+      ];
+
+      const replies = {
+        a: [
+          { who: "Rebecca", side: "from-b", text: "很好，「再改一版」是宣传部的母语之一。" },
+          { who: "Andy", side: "", text: "记得改完把文件存成「最终版_真的最终」。不然明天会迷路。" },
+        ],
+        b: [
+          { who: "Andy", side: "", text: "截止时间通常藏在群消息、口头约定，以及大家心里的恐慌值里。" },
+          { who: "Rebecca", side: "from-b", text: "但别慌。问清楚，比埋头猛赶更靠谱。" },
+        ],
+        c: [
+          { who: "Rebecca", side: "from-b", text: "接住抽象的人，通常也能接住突发改稿。" },
+          { who: "Andy", side: "", text: "欢迎入部。下一站：人格小测。请保持幽默感。" },
+        ],
+      };
+
+      const chat = $("#chat");
+      const chatActions = $("#chatActions");
+      let chatBusy = false;
+
+      function typeBubble(item) {
+        return new Promise((resolve) => {
+          const el = document.createElement("div");
+          el.className = `bubble ${item.side}`.trim();
+          el.innerHTML = `<div class="who">${item.who}</div><div class="txt cursor-blink"></div>`;
+          chat.appendChild(el);
+          requestAnimationFrame(() => el.classList.add("is-show"));
+          const txt = el.querySelector(".txt");
+          let i = 0;
+          const tick = () => {
+            txt.textContent = item.text.slice(0, i);
+            i += 1;
+            if (i <= item.text.length) {
+              setTimeout(tick, 18 + Math.random() * 22);
+            } else {
+              txt.classList.remove("cursor-blink");
+              resolve();
+            }
+          };
+          tick();
+        });
+      }
+
+      async function playLines(arr) {
+        chatBusy = true;
+        for (const line of arr) {
+          await typeBubble(line);
+          await wait(280);
+        }
+        chatBusy = false;
+      }
+
+      function wait(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+      }
+
+      async function startChat() {
+        await playLines(lines);
+        chatActions.hidden = false;
+      }
+
+      chatActions.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-reply]");
+        if (!btn || chatBusy) return;
+        $$(".chip-btn", chatActions).forEach((b) => {
+          b.disabled = true;
+          if (b === btn) b.classList.add("is-picked");
+        });
+        await playLines(replies[btn.dataset.reply]);
+        markStamp("chat");
+      });
+
+      /* Quiz */
+      const questions = [
+        {
+          q: "活动海报已经「最终版」了，负责人说还想再挪一下标题。你的第一反应？",
+          options: [
+            { t: "打开文件，边改边问「挪多少算浪漫」", s: 2, f: "正确。浪漫常常以像素计价。" },
+            { t: "先存一个「最终版_backup_今晚」", s: 3, f: "你有生存智慧。抽象值 +3。" },
+            { t: "建议直接发，审美疲劳也是一种风格", s: 1, f: "勇气可嘉，但群里可能出现不同意见。" },
+          ],
+        },
+        {
+          q: "推文需要一张「有氛围」的图，素材夹里只有光线奇怪的抓拍。怎么办？",
+          options: [
+            { t: "加颗粒、压暗角，把奇怪说成质感", s: 3, f: "宣传部炼金术入门已通过。" },
+            { t: "诚实配文：现场就是这样，真实也锋利", s: 2, f: "真诚路线，很有个性。" },
+            { t: "重拍。世界会等到你准备好", s: 1, f: "理想主义很美，deadline 可能不同意。" },
+          ],
+        },
+        {
+          q: "同事在群里发来「急！十分钟要！」你？",
+          options: [
+            { t: "先回「收到」，再问关键信息", s: 3, f: "稳定输出型人格，部门需要你。" },
+            { t: "瞬间进入战斗模式，咖啡后置", s: 2, f: "热血可贵，记得呼吸。" },
+            { t: "回一个抽象表情包缓冲十秒", s: 2, f: "幽默是减压阀，然后还是要开工。" },
+          ],
+        },
+        {
+          q: "你觉得宣传部最像什么？",
+          options: [
+            { t: "把校园情绪翻译成视觉语言的小电台", s: 3, f: "诗意且准确。欢迎入驻。" },
+            { t: "一群和像素较真、又彼此托底的人", s: 3, f: "这就是我们想说但没说完的那句。" },
+            { t: "截稿驱动的轻型航天器", s: 2, f: "抽象得分有效。燃料是热情与备份。" },
+          ],
+        },
+      ];
+
+      const qTitle = $("#qTitle");
+      const qOptions = $("#qOptions");
+      const qProgress = $("#qProgress");
+      const qFeedback = $("#qFeedback");
+      const scoreRing = $("#scoreRing");
+      const scoreNum = $("#scoreNum");
+      const scoreMsg = $("#scoreMsg");
+
+      function renderQuestion() {
+        const item = questions[state.quizIndex];
+        if (!item) return;
+        qProgress.textContent = `问题 ${state.quizIndex + 1} / ${questions.length}`;
+        qTitle.textContent = item.q;
+        qOptions.innerHTML = "";
+        item.options.forEach((opt, idx) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "opt";
+          b.textContent = opt.t;
+          b.addEventListener("click", () => answerQuiz(idx));
+          qOptions.appendChild(b);
+        });
+      }
+
+      function answerQuiz(idx) {
+        const item = questions[state.quizIndex];
+        const chosen = item.options[idx];
+        state.quizScore += chosen.s;
+        const max = questions.length * 3;
+        const p = Math.round((state.quizScore / max) * 100);
+        scoreRing.style.setProperty("--p", p);
+        scoreNum.textContent = state.quizScore;
+        qFeedback.textContent = chosen.f;
+        $$(".opt", qOptions).forEach((el, i) => {
+          el.disabled = true;
+          if (i === idx) el.classList.add("is-correct");
+        });
+        setTimeout(() => {
+          state.quizIndex += 1;
+          if (state.quizIndex >= questions.length) {
+            finishQuiz(p);
+          } else {
+            renderQuestion();
+          }
+        }, 700);
+      }
+
+      function finishQuiz(p) {
+        qTitle.textContent = "测验结束。你的抽象值已备案。";
+        qOptions.innerHTML = "";
+        qProgress.textContent = "完成";
+        let msg = "你已具备宣传部基础语感。";
+        if (p >= 85) msg = "抽象大师预备役。请谨慎使用「最终版」命名技能。";
+        else if (p >= 60) msg = "稳。既会认真，也会开玩笑——这很宣传部。";
+        scoreMsg.textContent = msg;
+        qFeedback.textContent = "小测印章已点亮。继续往下翻卡片吧。";
+        markStamp("quiz");
+      }
+
+      renderQuestion();
+
+      /* Flip cards */
+      $$(".flip").forEach((card) => {
+        const toggle = () => {
+          card.classList.toggle("is-flipped");
+          if (card.classList.contains("is-flipped")) {
+            state.flipped += 1;
+            if (state.flipped >= 1) markStamp("flip");
+          }
+        };
+        card.addEventListener("click", toggle);
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
+
+      /* Photo section stamp */
+      const photoFrame = $("#photoFrame");
+      if (photoFrame) {
+        const photoIo = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              markStamp("photo");
+              photoIo.disconnect();
+            }
+          });
+        }, { threshold: 0.45 });
+        photoIo.observe(photoFrame);
+      }
+
+      /* Hunt */
+      const huntStatus = $("#huntStatus");
+      $$(".spot").forEach((spot) => {
+        spot.addEventListener("click", () => {
+          if (spot.classList.contains("is-got")) return;
+          spot.classList.add("is-got");
+          state.huntCount += 1;
+          huntStatus.textContent = `已收集 ${state.huntCount} / 4 · 最新印章「${spot.dataset.stamp}」`;
+          if (state.huntCount >= 4) {
+            huntStatus.textContent = "四枚印章齐了。终章已解锁，往下滑。";
+            markStamp("hunt");
+          }
+        });
+      });
+
+      /* Media mode switch */
+      $$(".media-switch button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          $$(".media-switch button").forEach((b) => {
+            b.classList.toggle("is-on", b === btn);
+            b.setAttribute("aria-selected", b === btn ? "true" : "false");
+          });
+          const mode = btn.dataset.mode;
+          $("#stagePhotos").classList.toggle("is-on", mode === "photos");
+          $("#stageVideo").classList.toggle("is-on", mode === "video");
+        });
+      });
+
+      /* Auto-detect local media if present */
+      function tryMedia(selector, tag, src) {
+        const slot = $(selector);
+        if (!slot) return;
+        const el = document.createElement(tag);
+        if (tag === "video") {
+          el.controls = true;
+          el.playsInline = true;
+        }
+        el.src = src;
+        el.alt = "";
+        el.addEventListener("load", () => {
+          slot.appendChild(el);
+          slot.classList.add("has-media");
+        });
+        el.addEventListener("loadeddata", () => {
+          if (tag === "video") {
+            slot.appendChild(el);
+            slot.classList.add("has-media");
+          }
+        });
+        el.addEventListener("error", () => el.remove());
+        // probe
+        if (tag === "img") {
+          const probe = new Image();
+          probe.onload = () => {
+            slot.appendChild(el);
+            slot.classList.add("has-media");
+          };
+          probe.src = src;
+        } else {
+          el.load?.();
+          slot.appendChild(el);
+          // keep label until metadata; if error remove
+          el.addEventListener("error", () => {
+            el.remove();
+            slot.classList.remove("has-media");
+          });
+          el.addEventListener("loadeddata", () => slot.classList.add("has-media"));
+        }
+      }
+
+      tryMedia("#groupPhotoSlot", "img", "photo.jpg");
+      tryMedia("#photoAndy", "img", "andy.jpg");
+      tryMedia("#photoRebecca", "img", "rebecca.jpg");
+      tryMedia("#videoSlot", "video", "blessing.mp4");
+
+      function burstConfetti() {
+        const box = $("#confetti");
+        const colors = ["#7a1f2b", "#c45c48", "#d4c4a8", "#c5d6e0", "#f7f3ec"];
+        for (let i = 0; i < 48; i++) {
+          const bit = document.createElement("i");
+          bit.style.left = Math.random() * 100 + "%";
+          bit.style.background = colors[i % colors.length];
+          bit.style.animationDuration = 1.6 + Math.random() * 1.4 + "s";
+          bit.style.transform = `rotate(${Math.random() * 180}deg)`;
+          box.appendChild(bit);
+          setTimeout(() => bit.remove(), 3200);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
