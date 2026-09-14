@@ -145,6 +145,46 @@
     }
     .stamp-dots i.on { background: var(--maroon); }
 
+    .bgm-toggle {
+      position: fixed;
+      left: 1rem;
+      bottom: 1rem;
+      z-index: 850;
+      display: none;
+      align-items: center;
+      gap: 0.45rem;
+      appearance: none;
+      border: 1px solid var(--line);
+      background: rgba(247, 243, 236, 0.92);
+      backdrop-filter: blur(10px);
+      color: var(--ink-soft);
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      transition: transform 0.3s var(--ease), background 0.3s, color 0.3s;
+    }
+    .bgm-toggle.is-on { display: inline-flex; }
+    .bgm-toggle:hover {
+      transform: translateY(-1px);
+      color: var(--maroon-deep);
+    }
+    .bgm-toggle .bgm-icon {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+    .bgm-toggle.is-muted {
+      opacity: 0.72;
+    }
+    .bgm-toggle .label-off { display: none; }
+    .bgm-toggle.is-muted .label-on { display: none; }
+    .bgm-toggle.is-muted .label-off { display: inline; }
+    .bgm-toggle .icon-off { display: none; }
+    .bgm-toggle.is-muted .icon-on { display: none; }
+    .bgm-toggle.is-muted .icon-off { display: block; }
+
     /* ---------- Hero ---------- */
     .hero {
       min-height: 100svh;
@@ -766,9 +806,9 @@
   <div class="curtain" id="curtain" role="dialog" aria-label="开场">
     <div class="curtain-inner">
       <div class="curtain-brand">CUPA</div>
-      <p class="curtain-sub">香港城市大学研究生会宣传部<br />一封写给 26fall 新成员的神秘祝福</p>
+      <p class="curtain-sub">香港城市大学研究生会宣传部<br />一封寄给 26fall 新成员的神秘祝福</p>
       <p class="curtain-hint">click to unfold</p>
-      <button class="enter-btn" id="enterBtn" type="button">迫不及待地点开（搓手手）</button>
+      <button class="enter-btn" id="enterBtn" type="button">迫不及待地点开 <搓手手></button>
     </div>
   </div>
 
@@ -783,6 +823,19 @@
       <i data-k="hunt"></i>
     </div>
   </div>
+  <audio id="bgm" src="bgm.mp3" loop preload="auto"></audio>
+  <button class="bgm-toggle" id="bgmToggle" type="button" aria-pressed="true" aria-label="关闭背景音乐" hidden>
+    <svg class="bgm-icon icon-on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M11 5L6.5 9H3v6h3.5L11 19V5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M15.2 9.2a4.2 4.2 0 010 5.6M17.8 6.6a7.8 7.8 0 010 10.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <svg class="bgm-icon icon-off" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M11 5L6.5 9H3v6h3.5L11 19V5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="label-on">敲锣打鼓中</span>
+    <span class="label-off">捏住嘴巴</span>
+  </button>
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
   <main id="main" hidden>
@@ -796,7 +849,7 @@
           <span>宣传部 · 26fall</span>
         </h1>
         <p class="hero-line">欢迎加入这场「认真地不正经」的宣传宇宙。</p>
-        <p class="hero-support">Andy 与 Rebecca 写给你们的初次见面信。点一点、滑一滑、答一答——一幅画卷等待大家展开。</p>
+        <p class="hero-support">Andy 与 Rebecca 写给你们的初次见面信。点一点、滑一滑、答一答——长长的卷轴等待大家展开。</p>
         <a class="hero-cta" href="#dialogue">
           我要看我要看
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -886,7 +939,7 @@
               </div>
               <div class="face face-back">
                 <span class="num">03</span>
-                <p>痕迹可以是一张爆款推文，也可以是群里凌晨两点的「我来」。抽象，但真实。</p>
+                <p>痕迹可以是一张爆款推文，也可以是群里凌晨两点的「我来」。高光的，琐碎的，都作数。</p>
               </div>
             </div>
           </article>
@@ -900,14 +953,14 @@
         <div class="reveal">
           <p class="eyebrow">04 · Photo</p>
           <h2 class="h2">一张合影</h2>
-          <p class="lede">CUPA 25fall 就职典礼后，宣传部的聚餐合影。</p>
+          <p class="lede">CUPA 25fall 就职典礼，宣传部的聚餐合影。</p>
         </div>
         <article class="photo-frame reveal" id="photoFrame">
           <div class="mem-visual" id="groupPhotoSlot">
             <p class="ph">请把 photo.jpg 放到与本页面同一目录</p>
           </div>
           <div class="mem-caption">
-            <h3>我们先吃饭再并肩</h3>
+            <h3>我们先吃饭，再并肩</h3>
           </div>
         </article>
       </div>
@@ -937,7 +990,7 @@
         <div class="reveal">
           <p class="eyebrow">06 · Blessing</p>
           <h2 class="h2">神秘祝福</h2>
-          <p class="lede">Andy · 邴建皓 与 Rebecca · 余朴华，上一届宣传部的位负责人，把祝福留给 26fall 的你们。</p>
+          <p class="lede">Andy · 邴建皓 与 Rebecca · 余朴华，上一届宣传部的两位负责人，把祝福送给 26fall 的你们。</p>
         </div>
 
         <div class="finale-lock reveal" id="finaleLock">
@@ -1014,6 +1067,41 @@
       const journeyBar = $("#journeyBar");
       const stampDock = $("#stampDock");
       const pageFooter = $("#pageFooter");
+      const bgm = $("#bgm");
+      const bgmToggle = $("#bgmToggle");
+      let bgmWanted = true;
+
+      function setBgmUi(playing) {
+        bgmToggle.classList.toggle("is-muted", !playing);
+        bgmToggle.setAttribute("aria-pressed", playing ? "true" : "false");
+        bgmToggle.setAttribute("aria-label", playing ? "关闭背景音乐" : "打开背景音乐");
+      }
+
+      function playBgm() {
+        if (!bgm || !bgmWanted) return;
+        const p = bgm.play();
+        if (p && typeof p.then === "function") {
+          p.then(() => setBgmUi(true)).catch(() => setBgmUi(false));
+        } else {
+          setBgmUi(!bgm.paused);
+        }
+      }
+
+      function pauseBgm() {
+        if (!bgm) return;
+        bgm.pause();
+        setBgmUi(false);
+      }
+
+      bgmToggle.addEventListener("click", () => {
+        bgmWanted = !bgmWanted;
+        if (bgmWanted) playBgm();
+        else pauseBgm();
+      });
+
+      bgm.addEventListener("error", () => {
+        setBgmUi(false);
+      });
 
       enterBtn.addEventListener("click", () => {
         curtain.classList.add("is-gone");
@@ -1021,10 +1109,13 @@
         pageFooter.hidden = false;
         journeyBar.classList.add("is-on");
         stampDock.classList.add("is-on");
+        bgmToggle.hidden = false;
+        bgmToggle.classList.add("is-on");
         document.body.style.overflow = "";
         setTimeout(() => curtain.remove(), 1000);
         initReveal();
         startChat();
+        playBgm();
       });
 
       /* Progress bar */
