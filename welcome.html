@@ -681,6 +681,7 @@
       padding: 1.25rem;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
     .media-slot video,
     .media-slot img {
@@ -705,6 +706,11 @@
       opacity: 0.92;
     }
     .media-slot.has-media .slot-label { display: none; }
+    .media-slot.has-media { cursor: default; }
+    .name-card a {
+      color: var(--sand);
+      text-underline-offset: 0.22em;
+    }
     .names-row {
       margin-top: 1.75rem;
       display: grid;
@@ -987,11 +993,11 @@
 
         <div id="finaleContent" hidden>
           <div class="photo-grid">
-            <div class="media-slot" id="videoAndy">
-              <p class="slot-label">Andy · 邴建皓<br />祝福视频 · andy.mp4</p>
+            <div class="media-slot" id="videoAndy" data-src="andy.mp4">
+              <p class="slot-label">Andy · 邴建皓<br />点此播放祝福视频</p>
             </div>
-            <div class="media-slot" id="videoRebecca">
-              <p class="slot-label">Rebecca · 余朴华<br />祝福视频 · rebecca.mp4</p>
+            <div class="media-slot" id="videoRebecca" data-src="rebecca.mp4">
+              <p class="slot-label">Rebecca · 余朴华<br />点此播放祝福视频</p>
             </div>
           </div>
 
@@ -999,12 +1005,12 @@
             <div class="name-card">
               <h3>Andy</h3>
               <p class="cn">邴建皓</p>
-              
+              <p><a href="andy.mp4" target="_blank" rel="noopener">页面里播不了，点此打开视频</a></p>
             </div>
             <div class="name-card">
               <h3>Rebecca</h3>
               <p class="cn">余朴华</p>
-              
+              <p><a href="rebecca.mp4" target="_blank" rel="noopener">页面里播不了，点此打开视频</a></p>
             </div>
           </div>
 
@@ -1134,6 +1140,43 @@
         $("#finaleLock").hidden = true;
         $("#finaleContent").hidden = false;
         burstConfetti();
+        mountBlessingVideos();
+      }
+
+      function mountBlessingVideos() {
+        $$("#finaleContent .media-slot[data-src]").forEach((slot) => {
+          if (slot.dataset.bound === "1") return;
+          slot.dataset.bound = "1";
+          slot.addEventListener("click", () => startBlessingVideo(slot));
+        });
+      }
+
+      function startBlessingVideo(slot) {
+        if (slot.querySelector("video")) return;
+        const src = slot.dataset.src;
+        if (!src) return;
+        const label = slot.querySelector(".slot-label");
+        const el = document.createElement("video");
+        el.controls = true;
+        el.playsInline = true;
+        el.setAttribute("playsinline", "");
+        el.setAttribute("webkit-playsinline", "");
+        el.setAttribute("x5-playsinline", "");
+        el.setAttribute("x5-video-player-type", "h5");
+        el.setAttribute("x5-video-player-fullscreen", "false");
+        el.preload = "auto";
+        el.src = src;
+        slot.appendChild(el);
+        slot.classList.add("has-media");
+        const playAttempt = el.play();
+        if (playAttempt && typeof playAttempt.catch === "function") {
+          playAttempt.catch(() => {});
+        }
+        el.addEventListener("error", () => {
+          el.remove();
+          slot.classList.remove("has-media");
+          if (label) label.innerHTML = "这段视频没能播出来<br />再点一次，或用下方链接打开";
+        });
       }
 
       /* Reveal on scroll */
@@ -1414,8 +1457,6 @@
       }
 
       tryMedia("#groupPhotoSlot", "img", "photo.jpg");
-      tryMedia("#videoAndy", "video", "andy.mp4");
-      tryMedia("#videoRebecca", "video", "rebecca.mp4");
 
       function burstConfetti() {
         const box = $("#confetti");
