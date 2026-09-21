@@ -215,7 +215,7 @@
       position: relative;
       z-index: 2;
       padding: clamp(2rem, 6vw, 4.5rem);
-      padding-bottom: clamp(3rem, 8vw, 5.5rem);
+      padding-bottom: clamp(5.5rem, 12vw, 7rem);
       max-width: 52rem;
     }
     .hero-brand {
@@ -258,18 +258,26 @@
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
+      appearance: none;
+      border: none;
       background: var(--foam);
       color: var(--ink);
       text-decoration: none;
       padding: 0.9rem 1.4rem;
       border-radius: 999px;
       font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      z-index: 3;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       opacity: 0;
       animation: riseIn 1s 0.7s var(--ease) forwards;
       transition: transform 0.3s var(--ease);
     }
     .hero-cta:hover { transform: translateY(-2px); }
-    .hero-cta svg { width: 18px; height: 18px; }
+    .hero-cta:active { transform: translateY(0); }
+    .hero-cta svg { width: 18px; height: 18px; pointer-events: none; }
 
     /* ---------- Sections common ---------- */
     .section {
@@ -652,30 +660,6 @@
       font-size: 1.1rem;
       opacity: 0.8;
     }
-    .media-switch {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-    .media-switch button {
-      appearance: none;
-      border: 1px solid rgba(250,248,244,0.25);
-      background: transparent;
-      color: var(--foam);
-      padding: 0.55rem 1rem;
-      border-radius: 999px;
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.25s, background 0.25s, border-color 0.25s;
-    }
-    .media-switch button.is-on {
-      opacity: 1;
-      background: rgba(250,248,244,0.12);
-      border-color: rgba(250,248,244,0.5);
-    }
-    .media-stage { display: none; }
-    .media-stage.is-on { display: block; }
     .photo-grid {
       display: grid;
       gap: 1rem;
@@ -705,6 +689,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      background: #111;
+    }
+    .media-slot video {
+      object-fit: contain;
+      z-index: 2;
     }
     .slot-label {
       position: relative;
@@ -716,7 +705,6 @@
       opacity: 0.92;
     }
     .media-slot.has-media .slot-label { display: none; }
-    .video-slot { max-width: 860px; margin: 0 auto; }
     .names-row {
       margin-top: 1.75rem;
       display: grid;
@@ -850,10 +838,10 @@
         </h1>
         <p class="hero-line">欢迎加入这场「认真地不正经」的宣传宇宙。</p>
         <p class="hero-support">Andy 与 Rebecca 写给你们的初次见面信。点一点、滑一滑、答一答——长长的卷轴等待大家展开。</p>
-        <a class="hero-cta" href="#dialogue">
+        <button class="hero-cta" id="heroCta" type="button">
           我要看我要看
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-        </a>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
       </div>
     </header>
 
@@ -957,7 +945,7 @@
         </div>
         <article class="photo-frame reveal" id="photoFrame">
           <div class="mem-visual" id="groupPhotoSlot">
-            <p class="ph">请把 photo.jpg 放到与本页面同一目录</p>
+            <p class="ph">加载中...</p>
           </div>
           <div class="mem-caption">
             <h3>我们先吃饭，再并肩</h3>
@@ -972,7 +960,7 @@
         <div class="reveal">
           <p class="eyebrow">05 · Collect</p>
           <h2 class="h2">收集四枚「部门印章」</h2>
-          <p class="lede">点亮它们。全部点亮后，终章的照片 / 视频位才会正式解锁——仪式感这件事，宣传部懂。</p>
+          <p class="lede">点亮它们。全部点亮后，终章的祝福视频才会正式解锁——仪式感这件事，宣传部懂。</p>
         </div>
         <div class="hunt-board reveal" id="huntBoard">
           <button class="spot" type="button" data-stamp="灵感" aria-label="收集印章：灵感">灵</button>
@@ -989,8 +977,8 @@
       <div class="section-narrow">
         <div class="reveal">
           <p class="eyebrow">06 · Blessing</p>
-          <h2 class="h2">神秘祝福</h2>
-          <p class="lede">Andy · 邴建皓 与 Rebecca · 余朴华，上一届宣传部的两位负责人，把祝福送给 26fall 的你们。</p>
+          <h2 class="h2">神秘祝福——想对你们说的话</h2>
+          <p class="lede">Andy · 邴建皓 与 Rebecca · 余朴华，上一届宣传部的两位负责人，有一些想对你们说的话。</p>
         </div>
 
         <div class="finale-lock reveal" id="finaleLock">
@@ -998,28 +986,12 @@
         </div>
 
         <div id="finaleContent" hidden>
-          <div class="media-switch" role="tablist" aria-label="媒体形式">
-            <button type="button" class="is-on" data-mode="photos" role="tab" aria-selected="true">双照片模式</button>
-            <button type="button" data-mode="video" role="tab" aria-selected="false">祝福视频模式</button>
-          </div>
-
-          <div class="media-stage is-on" id="stagePhotos" role="tabpanel">
-            <div class="photo-grid">
-              <div class="media-slot" id="photoAndy">
-                <!-- <img src="andy.jpg" alt="Andy 邴建皓" /> -->
-                <p class="slot-label">Andy · 邴建皓<br />横图照片位 · andy.jpg</p>
-              </div>
-              <div class="media-slot" id="photoRebecca">
-                <!-- <img src="rebecca.jpg" alt="Rebecca 余朴华" /> -->
-                <p class="slot-label">Rebecca · 余朴华<br />横图照片位 · rebecca.jpg</p>
-              </div>
+          <div class="photo-grid">
+            <div class="media-slot" id="videoAndy">
+              <p class="slot-label">Andy · 邴建皓<br />祝福视频 · andy.mp4</p>
             </div>
-          </div>
-
-          <div class="media-stage" id="stageVideo" role="tabpanel">
-            <div class="media-slot video-slot" id="videoSlot">
-              <!-- <video src="blessing.mp4" controls playsinline></video> -->
-              <p class="slot-label">祝福视频位 · blessing.mp4<br />横屏推荐 · 可替换为你们的录音+画面</p>
+            <div class="media-slot" id="videoRebecca">
+              <p class="slot-label">Rebecca · 余朴华<br />祝福视频 · rebecca.mp4</p>
             </div>
           </div>
 
@@ -1027,17 +999,17 @@
             <div class="name-card">
               <h3>Andy</h3>
               <p class="cn">邴建皓</p>
-              <p>祝福位</p>
+              
             </div>
             <div class="name-card">
               <h3>Rebecca</h3>
               <p class="cn">余朴华</p>
-              <p>祝福位</p>
+              
             </div>
           </div>
 
           <p class="handoff">
-            也谢谢现任负责人 Judy · 刘若萱 与 Charles · 刘博文，把招新的火传了下去。
+            也感谢现任负责人 Judy · 刘若萱 与 Charles · 刘博文，把招新的火传了下去。
             26fall 的新成员们：从现在起，CUPA 宣传部的下一屏，由你们来排版。
           </p>
         </div>
@@ -1116,6 +1088,19 @@
         initReveal();
         startChat();
         playBgm();
+      });
+
+      const heroCta = $("#heroCta");
+      const dialogue = $("#dialogue");
+      heroCta.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!dialogue) return;
+        const top = dialogue.getBoundingClientRect().top + window.pageYOffset - 8;
+        try {
+          window.scrollTo({ top, behavior: "smooth" });
+        } catch (_) {
+          window.scrollTo(0, top);
+        }
       });
 
       /* Progress bar */
@@ -1385,19 +1370,6 @@
         });
       });
 
-      /* Media mode switch */
-      $$(".media-switch button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          $$(".media-switch button").forEach((b) => {
-            b.classList.toggle("is-on", b === btn);
-            b.setAttribute("aria-selected", b === btn ? "true" : "false");
-          });
-          const mode = btn.dataset.mode;
-          $("#stagePhotos").classList.toggle("is-on", mode === "photos");
-          $("#stageVideo").classList.toggle("is-on", mode === "video");
-        });
-      });
-
       /* Auto-detect local media if present */
       function tryMedia(selector, tag, src) {
         const slot = $(selector);
@@ -1406,6 +1378,7 @@
         if (tag === "video") {
           el.controls = true;
           el.playsInline = true;
+          el.preload = "metadata";
         }
         el.src = src;
         el.alt = "";
@@ -1441,9 +1414,8 @@
       }
 
       tryMedia("#groupPhotoSlot", "img", "photo.jpg");
-      tryMedia("#photoAndy", "img", "andy.jpg");
-      tryMedia("#photoRebecca", "img", "rebecca.jpg");
-      tryMedia("#videoSlot", "video", "blessing.mp4");
+      tryMedia("#videoAndy", "video", "andy.mp4");
+      tryMedia("#videoRebecca", "video", "rebecca.mp4");
 
       function burstConfetti() {
         const box = $("#confetti");
