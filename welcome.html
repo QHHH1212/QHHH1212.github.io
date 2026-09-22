@@ -749,6 +749,14 @@
       opacity: 0.8;
       max-width: 36rem;
     }
+    .handoff-mark {
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-color: #f0d45a;
+      text-decoration-thickness: 0.22em;
+      text-underline-offset: 0.28em;
+      text-decoration-skip-ink: none;
+    }
     .confetti {
       position: fixed;
       inset: 0;
@@ -841,10 +849,10 @@
       <div class="hero-content">
         <h1 class="hero-brand">
           CUPA
-          <span>宣传部 · 26fall</span>
+          <span>宣传部 · 2026</span>
         </h1>
         <p class="hero-line">欢迎加入这场「认真地不正经」的宣传宇宙。</p>
-        <p class="hero-support">Andy 与 Rebecca 写给你们的初次见面信。点一点、滑一滑、答一答——长长的卷轴等待大家展开。</p>
+        <p class="hero-support">Andy 与 Rebecca 写给你们的初次见面信。点一点、滑一滑——长长的卷轴等待大家展开。</p>
         <button class="hero-cta" id="heroCta" type="button">
           我要看我要看
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
@@ -1016,8 +1024,8 @@
           </div>
 
           <p class="handoff">
-            也感谢现任负责人 Judy · 刘若萱 与 Charles · 刘博文，把招新的火传了下去。
-            26fall 的新成员们：从现在起，CUPA 宣传部的下一屏，由你们来排版。
+            <span class="handoff-mark">也感谢现任负责人 Judy · 刘若萱 与 Charles · 刘博文，把招新的火传了下去。
+            26fall 的新成员们：从现在起，CUPA 宣传部的下一屏，由你们来排版。</span>
           </p>
         </div>
       </div>
@@ -1192,7 +1200,7 @@
 
       /* Chat */
       const lines = [
-        { who: "Andy", side: "", text: "咳咳，麦克风有人吗？这是写给 26fall 宣传部新成员的非官方欢迎仪式。" },
+        { who: "Andy", side: "", text: "咳咳（麦克风），有人在吗？这是写给 26fall 宣传部新成员的非官方欢迎仪式。" },
         { who: "Rebecca", side: "from-b", text: "官方的已经招完了。我们负责把气氛做抽象一点。" },
         { who: "Andy", side: "", text: "宣传部三件套：审美、截止时间、以及「再改一版会更香」。" },
         { who: "Rebecca", side: "from-b", text: "还有第四件：队友。没有队友，审美会变成孤岛。" },
@@ -1299,7 +1307,7 @@
         {
           q: "你觉得宣传部最像什么？",
           options: [
-            { t: "把校园情绪翻译成视觉语言的小电台", s: 3, f: "诗意且准确。欢迎入驻。" },
+            { t: "把校园情绪调成频率的小电台", s: 3, f: "诗意且准确。欢迎入驻。" },
             { t: "一群和像素较真、又彼此托底的人", s: 3, f: "这就是我们想说但没说完的那句。" },
             { t: "截稿驱动的轻型航天器", s: 2, f: "抽象得分有效。燃料是热情与备份。" },
           ],
