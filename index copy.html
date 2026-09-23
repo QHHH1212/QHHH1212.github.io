@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中秋安康 · 致叔叔阿姨与曦予</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0a1220;
+      --ink-soft: #152033;
+      --navy: #1a2d4a;
+      --moon: #f7ecd4;
+      --moon-deep: #e8d4a8;
+      --gold: #e0b63a;
+      --gold-soft: #f0d078;
+      --amber: #d4783a;
+      --cinnabar: #c45c3a;
+      --jade: #6a8f7a;
+      --pearl: #f3efe6;
+      --mist: rgba(243, 239, 230, 0.78);
+      --line: rgba(224, 182, 58, 0.35);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --hue: 225;
+      --silver: #a8b4c4;
+      --reveal: 18%;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      color: var(--pearl);
+      background: var(--ink);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    body.is-locked { overflow: hidden; height: 100vh; height: 100dvh; }
+
+    @media (hover: none), (pointer: coarse) {
+      body { cursor: auto; }
+      .cursor, .cursor-dot { display: none !important; }
+    }
+
+    /* Custom cursor */
+    .cursor, .cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+    .cursor {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(247, 236, 212, 0.7);
+      transition: width .25s var(--ease), height .25s var(--ease), background .25s;
+    }
+    .cursor.is-active {
+      width: 56px; height: 56px;
+      background: rgba(247, 236, 212, 0.12);
+    }
+    .cursor-dot {
+      width: 5px; height: 5px;
+      background: var(--moon);
+    }
+
+    /* Starfield + festive FX canvas */
+    #sky, #fx {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #fx { z-index: 7; }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Ambient rising lanterns (always-on festive layer) */
+    #ambient-lanterns {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ambient-lantern {
+      position: absolute;
+      bottom: -100px;
+      width: var(--size, 28px);
+      opacity: 0;
+      animation: ambient-rise var(--life, 14s) linear forwards;
+      filter: drop-shadow(0 0 10px rgba(212, 120, 58, 0.55));
+    }
+    .ambient-lantern .lantern-body {
+      box-shadow: 0 0 18px rgba(232, 140, 60, 0.55), inset 0 0 16px rgba(255, 220, 140, 0.35);
+    }
+    @keyframes ambient-rise {
+      0% { transform: translateY(0) translateX(0) rotate(-3deg); opacity: 0; }
+      8% { opacity: var(--op, 0.55); }
+      85% { opacity: var(--op, 0.55); }
+      100% { transform: translateY(-115vh) translateX(var(--drift, 50px)) rotate(10deg); opacity: 0; }
+    }
+
+    .page { position: relative; z-index: 2; }
+
+    /* —— Focus gate (共婵娟第一幕) —— */
+    #gate {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(ellipse 55% 50% at 50% 42%, #152033 0%, #0a1220 55%, #05080f 100%);
+      transition: opacity 0.95s var(--ease), visibility 0.95s;
+    }
+    #gate.is-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .gate-inner {
+      text-align: center;
+      width: min(92vw, 420px);
+    }
+    .iris {
+      width: min(72vw, 300px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border-radius: 50%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      touch-action: none;
+      user-select: none;
+      background: radial-gradient(circle at 50% 45%, rgba(36, 52, 78, 0.55), rgba(10, 18, 32, 0.15) 70%, transparent 72%);
+      transition: transform 0.45s var(--ease);
+    }
+    .iris:hover { transform: scale(1.02); }
+    .iris-soft {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(26, 45, 74, 0.35), transparent 68%);
+      pointer-events: none;
+    }
+    .iris-ring {
+      position: absolute;
+      inset: 14%;
+      border-radius: 50%;
+      border: 1px dashed rgba(168, 180, 196, 0.28);
+      animation: gate-spin 48s linear infinite;
+      pointer-events: none;
+    }
+    .iris-ring-2 {
+      inset: 26%;
+      border-color: rgba(168, 180, 196, 0.2);
+      animation-duration: 64s;
+      animation-direction: reverse;
+    }
+    @keyframes gate-spin { to { transform: rotate(360deg); } }
+    .iris-moon {
+      width: 28%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #fffef8 0%, var(--moon) 42%, #d4c09a 100%);
+      box-shadow:
+        0 0 28px 8px rgba(247, 236, 212, 0.35),
+        0 0 60px 18px rgba(224, 182, 58, 0.18);
+      transform: scale(var(--open, 0.72));
+      transition: transform 0.05s linear, box-shadow 0.4s;
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .iris.is-holding .iris-moon {
+      box-shadow:
+        0 0 40px 14px rgba(247, 236, 212, 0.5),
+        0 0 90px 28px rgba(224, 182, 58, 0.28);
+    }
+    .iris-aperture {
+      position: absolute;
+      width: 34%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1.5px solid rgba(224, 182, 58, 0.9);
+      left: 38%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      transition: left 0.05s linear, top 0.05s linear, width 0.05s linear, opacity 0.4s;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.95;
+    }
+    .iris-aperture::before {
+      content: "";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      top: 4%;
+      left: 8%;
+      box-shadow: 0 0 8px rgba(224, 182, 58, 0.7);
+    }
+    .gate-copy { margin-top: 1.85rem; }
+    .gate-kicker {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.42em;
+      text-indent: 0.42em;
+      color: var(--gold-soft);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+    .gate-title {
+      font-family: "Noto Serif SC", serif;
+      font-weight: 400;
+      font-size: clamp(1.35rem, 4vw, 1.65rem);
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+      color: var(--pearl);
+      margin-bottom: 0.65rem;
+    }
+    .gate-hint {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--mist);
+      letter-spacing: 0.04em;
+    }
+    .gate-skip {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--mist);
+      font-family: "Noto Serif SC", serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      opacity: 0.45;
+      transition: opacity 0.3s;
+    }
+    .gate-skip:hover { opacity: 1; }
+
+    /* —— HERO —— */
+    .hero {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: clamp(2rem, 5vw, 4rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-atmosphere {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 75% 55% at 72% 26%, rgba(255, 230, 160, 0.28), transparent 58%),
+        radial-gradient(ellipse 45% 35% at 20% 70%, rgba(196, 92, 58, 0.16), transparent 55%),
+        radial-gradient(ellipse 55% 40% at 80% 85%, rgba(212, 120, 58, 0.14), transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 100%, rgba(21, 32, 51, 0.92), transparent 60%),
+        linear-gradient(180deg, #070d18 0%, #121f36 40%, #1a2838 100%);
+      z-index: -1;
+    }
+
+    /* Soft light beams from moon */
+    .moon-beams {
+      position: absolute;
+      inset: -30%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(247, 236, 212, 0.07) 8deg,
+        transparent 16deg,
+        transparent 40deg,
+        rgba(224, 182, 58, 0.06) 48deg,
+        transparent 56deg,
+        transparent 90deg,
+        rgba(247, 236, 212, 0.05) 98deg,
+        transparent 108deg,
+        transparent 160deg,
+        rgba(232, 140, 60, 0.05) 168deg,
+        transparent 178deg,
+        transparent 220deg,
+        rgba(247, 236, 212, 0.06) 228deg,
+        transparent 238deg,
+        transparent 300deg,
+        rgba(224, 182, 58, 0.05) 308deg,
+        transparent 318deg,
+        transparent 360deg
+      );
+      border-radius: 50%;
+      animation: beam-spin 60s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.85;
+    }
+    @keyframes beam-spin { to { transform: rotate(360deg); } }
+
+    .moon-wrap {
+      position: absolute;
+      top: 8%;
+      right: 8%;
+      width: min(42vw, 380px);
+      aspect-ratio: 1;
+      z-index: 0;
+    }
+
+    @media (max-width: 768px) {
+      .moon-wrap {
+        top: 4%;
+        right: 50%;
+        transform: translateX(50%);
+        width: min(58vw, 240px);
+        opacity: 0.9;
+      }
+    }
+
+    .moon-halo {
+      position: absolute;
+      inset: -18%;
+      border-radius: 50%;
+      border: 1px solid rgba(247, 236, 212, 0.22);
+      animation: halo-pulse 5s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .moon-halo-2 {
+      inset: -36%;
+      border-color: rgba(224, 182, 58, 0.14);
+      animation-delay: -1.5s;
+      animation-duration: 7s;
+    }
+    .moon-halo-3 {
+      inset: -54%;
+      border-color: rgba(196, 92, 58, 0.1);
+      animation-delay: -3s;
+      animation-duration: 9s;
+    }
+    @keyframes halo-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.55; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+
+    .moon {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, #fffdf5 0%, var(--moon) 26%, var(--moon-deep) 58%, #c4a86a 100%);
+      box-shadow:
+        0 0 40px 12px rgba(255, 236, 180, 0.45),
+        0 0 90px 36px rgba(224, 182, 58, 0.28),
+        0 0 160px 60px rgba(212, 120, 58, 0.12),
+        inset -18px -12px 40px rgba(90, 70, 30, 0.18);
+      position: relative;
+      cursor: pointer;
+      animation: moon-breathe 6s ease-in-out infinite;
+      transition: transform .6s var(--ease);
+      z-index: 1;
+    }
+
+    .moon:hover { transform: scale(1.04); }
+    .moon:active { transform: scale(0.98); }
+    .moon.is-burst {
+      animation: moon-burst 0.85s var(--ease);
+    }
+    @keyframes moon-burst {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    .moon::before {
+      content: "";
+      position: absolute;
+      inset: 18% 22% auto auto;
+      width: 22%; height: 18%;
+      border-radius: 50%;
+      background: rgba(180, 150, 90, 0.18);
+      filter: blur(1px);
+    }
+    .moon::after {
+      content: "";
+      position: absolute;
+      inset: auto auto 28% 30%;
+      width: 14%; height: 12%;
+      border-radius: 50%;
+      background: rgba(160, 130, 70, 0.15);
+    }
+
+    .moon-hint {
+      position: absolute;
+      bottom: -2.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      color: var(--gold-soft);
+      white-space: nowrap;
+      opacity: 0.85;
+      animation: hint-pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes moon-breathe {
+      0%, 100% {
+        box-shadow:
+          0 0 40px 12px rgba(255, 236, 180, 0.4),
+          0 0 90px 36px rgba(224, 182, 58, 0.24),
+          0 0 150px 55px rgba(212, 120, 58, 0.1),
+          inset -18px -12px 40px rgba(90, 70, 30, 0.18);
+      }
+      50% {
+        box-shadow:
+          0 0 55px 18px rgba(255, 240, 190, 0.6),
+          0 0 120px 50px rgba(224, 182, 58, 0.38),
+          0 0 190px 80px rgba(212, 120, 58, 0.18),
+          inset -18px -12px 40px rgba(90, 70, 30, 0.18);
+      }
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 36rem;
+      margin-inline: auto;
+      animation: rise-in 1.4s var(--ease) both;
+    }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(36px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand {
+      font-family: "ZCOOL XiaoWei", "Noto Serif SC", serif;
+      font-size: clamp(3.2rem, 10vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: 0.18em;
+      color: var(--moon);
+      text-indent: 0.18em;
+      margin-bottom: 1.25rem;
+      text-shadow:
+        0 0 24px rgba(255, 220, 140, 0.45),
+        0 2px 40px rgba(247, 236, 212, 0.35);
+      background: linear-gradient(120deg, #fff8e0 0%, #f0d078 35%, #fff 50%, #e0b63a 70%, #fff4d0 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: brand-shine 5s linear infinite;
+    }
+    @keyframes brand-shine {
+      0% { background-position: 0% center; }
+      100% { background-position: 220% center; }
+    }
+
+    .hero-line {
+      width: 4.5rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-soft), var(--cinnabar), var(--gold-soft), transparent);
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 0 12px rgba(224, 182, 58, 0.5);
+    }
+
+    .reunion-tag {
+      display: inline-block;
+      margin-bottom: 1rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.35em;
+      color: var(--gold-soft);
+      text-indent: 0.35em;
+      opacity: 0;
+      animation: rise-in 1.2s var(--ease) 0.35s both;
+    }
+
+    .hero-title {
+      font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      color: var(--pearl);
+      margin-bottom: 1rem;
+      text-indent: 0.28em;
+    }
+
+    .hero-sub {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: var(--mist);
+      letter-spacing: 0.06em;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.95rem 1.75rem;
+      background: transparent;
+      border: 1px solid var(--gold-soft);
+      color: var(--moon);
+      font-family: "Noto Serif SC", serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      text-indent: 0.2em;
+      transition: background .35s var(--ease), color .35s, border-color .35s, transform .35s var(--ease);
+    }
+    .cta:hover {
+      background: var(--moon);
+      color: var(--ink);
+      border-color: var(--moon);
+      transform: translateY(-2px);
+    }
+    .cta svg {
+      width: 14px; height: 14px;
+      transition: transform .35s var(--ease);
+    }
+    .cta:hover svg { transform: translateY(3px); }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--mist);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      opacity: 0.6;
+      animation: rise-in 1.4s var(--ease) 0.6s both;
+    }
+    .scroll-cue span {
+      width: 1px;
+      height: 2.5rem;
+      background: linear-gradient(180deg, var(--gold-soft), transparent);
+      animation: scroll-line 2s ease-in-out infinite;
+    }
+    @keyframes scroll-line {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      40% { transform: scaleY(1); opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* —— SECTIONS —— */
+    section {
+      padding: clamp(4.5rem, 10vw, 8rem) clamp(1.5rem, 6vw, 4rem);
+      position: relative;
+    }
+
+    .section-label {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      color: var(--gold-soft);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+      letter-spacing: 0.12em;
+      color: var(--moon);
+      margin-bottom: 1.25rem;
+      font-weight: 400;
+    }
+
+    .section-lead {
+      max-width: 34rem;
+      color: var(--mist);
+      line-height: 1.9;
+      font-size: 1.02rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* Story */
+    .story {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 900px) {
+      .story {
+        grid-template-columns: 0.9fr 1.1fr;
+        align-items: center;
+        gap: 5rem;
+      }
+    }
+
+    .letter {
+      position: relative;
+      padding: clamp(2rem, 4vw, 3rem);
+      background:
+        linear-gradient(145deg, rgba(247, 236, 212, 0.08), rgba(247, 236, 212, 0.02));
+      border: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+      min-height: 22rem;
+    }
+
+    .letter::before {
+      content: "月";
+      position: absolute;
+      top: -0.35em;
+      right: 0.4em;
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: clamp(5rem, 12vw, 8rem);
+      color: rgba(247, 236, 212, 0.04);
+      line-height: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .letter-mask {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        transparent 0,
+        transparent var(--reveal, 18%),
+        rgba(10, 18, 32, 0.82) calc(var(--reveal, 18%) + 10%),
+        rgba(10, 18, 32, 0.96) 100%
+      );
+      pointer-events: none;
+      transition: background 0.4s ease, opacity 0.45s var(--ease);
+      z-index: 2;
+    }
+    .letter.is-full .letter-mask { opacity: 0; }
+
+    .letter-body { position: relative; z-index: 1; }
+
+    .letter p {
+      color: var(--pearl);
+      line-height: 2;
+      font-size: clamp(0.95rem, 1.8vw, 1.08rem);
+      letter-spacing: 0.06em;
+      margin-bottom: 1.35rem;
+    }
+    .letter p:last-child { margin-bottom: 0; }
+    .letter em {
+      font-style: normal;
+      color: var(--gold-soft);
+      border-bottom: 1px solid rgba(201, 162, 39, 0.35);
+    }
+
+    .story-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Moon phase dial — linked to letter light */
+    .story-dial {
+      text-align: center;
+      margin-top: 0.25rem;
+    }
+    .dial-wrap {
+      margin: 0.5rem auto 0.85rem;
+      width: min(100%, 260px);
+      aspect-ratio: 1;
+      position: relative;
+      touch-action: none;
+    }
+    .dial-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background:
+        conic-gradient(from var(--angle, 0deg),
+          hsl(var(--hue), 28%, 14%),
+          hsl(calc(var(--hue) + 40), 35%, 18%),
+          hsl(calc(var(--hue) + 80), 25%, 12%),
+          hsl(var(--hue), 28%, 14%));
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.45);
+    }
+    .dial-ticks {
+      position: absolute;
+      inset: 6%;
+      border-radius: 50%;
+      background: repeating-conic-gradient(
+        from 0deg,
+        transparent 0deg 8deg,
+        rgba(247, 236, 212, 0.12) 8deg 9deg
+      );
+      -webkit-mask: radial-gradient(circle, transparent 62%, #000 63%);
+      mask: radial-gradient(circle, transparent 62%, #000 63%);
+      pointer-events: none;
+    }
+    .dial-knob {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 42%;
+      aspect-ratio: 1;
+      margin: -21% 0 0 -21%;
+      border-radius: 50%;
+      border: 1px solid rgba(224, 182, 58, 0.45);
+      background: radial-gradient(circle at 35% 30%, #1a2333, #0a1018);
+      cursor: grab;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+    }
+    .dial-knob:active { cursor: grabbing; }
+    .dial-knob::before {
+      content: "";
+      position: absolute;
+      top: 12%;
+      left: 50%;
+      width: 3px;
+      height: 18%;
+      background: var(--gold);
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .dial-knob span {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--silver);
+    }
+    .dial-readout {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--mist);
+      min-height: 1.4em;
+    }
+    .phase-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: center;
+      margin-top: 0.85rem;
+    }
+    .phase-pills button {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--mist);
+      font-family: inherit;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      padding: 0.4rem 0.7rem;
+      cursor: pointer;
+      transition: border-color .3s, color .3s, background .3s;
+    }
+    .phase-pills button.on,
+    .phase-pills button:hover {
+      border-color: var(--gold-soft);
+      color: var(--moon);
+      background: rgba(224, 182, 58, 0.08);
+    }
+
+    /* Interactive lanterns */
+    .play {
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(184, 115, 51, 0.12), transparent 55%),
+        transparent;
+      text-align: center;
+    }
+
+    .play-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .play .section-lead { margin: 0 auto 2.5rem; }
+
+    .lantern-stage {
+      position: relative;
+      height: clamp(340px, 55vw, 460px);
+      margin-bottom: 2rem;
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .lantern {
+      position: absolute;
+      bottom: 8%;
+      width: 52px;
+      cursor: pointer;
+      transform-origin: top center;
+      animation: sway var(--dur, 4s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      transition: filter .3s;
+      z-index: 2;
+    }
+    .lantern:hover { filter: brightness(1.15); z-index: 3; }
+    .lantern.is-released {
+      animation: float-away 4.5s var(--ease) forwards;
+      pointer-events: none;
+    }
+
+    .lantern-body {
+      width: 100%;
+      aspect-ratio: 0.72;
+      background: linear-gradient(180deg, #e8914f 0%, #c45c3a 42%, #9a3a22 100%);
+      border-radius: 40% 40% 35% 35% / 25% 25% 45% 45%;
+      position: relative;
+      box-shadow:
+        0 8px 24px rgba(0,0,0,0.35),
+        0 0 22px rgba(232, 140, 60, 0.55),
+        inset 0 0 18px rgba(255, 220, 150, 0.35);
+      animation: lantern-flicker 2.4s ease-in-out infinite;
+    }
+    @keyframes lantern-flicker {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.12); }
+    }
+    .lantern-body::before {
+      content: "";
+      position: absolute;
+      inset: 12% 18%;
+      border: 1px solid rgba(247, 236, 212, 0.35);
+      border-radius: inherit;
+    }
+    .lantern-body::after {
+      content: attr(data-char);
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: 1.1rem;
+      color: rgba(247, 236, 212, 0.9);
+      letter-spacing: 0;
+    }
+    .lantern-cap {
+      width: 70%;
+      height: 8px;
+      margin: 0 auto -2px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+    .lantern-tail {
+      width: 2px;
+      height: 28px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--gold-soft), transparent);
+    }
+    .lantern-string {
+      width: 1px;
+      height: 40px;
+      margin: 0 auto;
+      background: rgba(201, 162, 39, 0.5);
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-4deg) translateY(0); }
+      50% { transform: rotate(4deg) translateY(-8px); }
+    }
+    @keyframes float-away {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-420px) scale(0.6); }
+    }
+
+    .wish-toast {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      padding: 1rem 1.5rem;
+      background: rgba(10, 18, 32, 0.88);
+      border: 1px solid var(--line);
+      color: var(--moon);
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s;
+      z-index: 5;
+      white-space: nowrap;
+    }
+    .wish-toast.is-show { opacity: 1; }
+
+    .wish-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: center;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .wish-form input {
+      flex: 1 1 220px;
+      padding: 0.9rem 1.1rem;
+      background: rgba(247, 236, 212, 0.05);
+      border: 1px solid var(--line);
+      color: var(--pearl);
+      font-family: "Noto Serif SC", serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      outline: none;
+      transition: border-color .3s;
+    }
+    .wish-form input::placeholder { color: rgba(243, 239, 230, 0.35); }
+    .wish-form input:focus { border-color: var(--gold-soft); }
+    .wish-form button {
+      padding: 0.9rem 1.4rem;
+      background: var(--moon);
+      border: none;
+      color: var(--ink);
+      font-family: "Noto Serif SC", serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: transform .3s var(--ease), background .3s;
+    }
+    .wish-form button:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Mooncake game */
+    .mooncakes {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .cake-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1rem, 3vw, 2rem);
+      margin-top: 2.5rem;
+    }
+
+    @media (max-width: 560px) {
+      .cake-grid { grid-template-columns: 1fr; max-width: 220px; margin-inline: auto; }
+    }
+
+    .cake {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      background:
+        radial-gradient(circle at 35% 30%, #f0d9a8, #c9a05a 45%, #9a7340 100%);
+      box-shadow:
+        inset -8px -10px 20px rgba(80, 50, 20, 0.25),
+        0 12px 28px rgba(0, 0, 0, 0.28);
+      transition: transform .45s var(--ease), box-shadow .45s;
+      overflow: hidden;
+    }
+    .cake:hover { transform: scale(1.04) rotate(-2deg); }
+    .cake.is-open {
+      transform: scale(0.96);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
+    }
+    .cake-pattern {
+      position: absolute;
+      inset: 18%;
+      border: 1.5px solid rgba(90, 60, 25, 0.35);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+    .cake-pattern span {
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      color: rgba(70, 45, 15, 0.55);
+      letter-spacing: 0.1em;
+    }
+    .cake-pattern::before,
+    .cake-pattern::after {
+      content: "";
+      position: absolute;
+      background: rgba(90, 60, 25, 0.25);
+    }
+    .cake-pattern::before {
+      width: 1px; height: 100%; left: 50%; top: 0;
+    }
+    .cake-pattern::after {
+      height: 1px; width: 100%; top: 50%; left: 0;
+    }
+
+    .cake-reveal {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 1.2rem;
+      background: rgba(10, 18, 32, 0.82);
+      color: var(--moon);
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      letter-spacing: 0.12em;
+      line-height: 1.7;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity .5s var(--ease), transform .5s var(--ease);
+    }
+    .cake.is-open .cake-reveal {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Closing */
+    .finale {
+      min-height: 85vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding-bottom: 6rem;
+      background:
+        radial-gradient(ellipse 55% 50% at 50% 38%, rgba(255, 220, 140, 0.22), transparent 62%),
+        radial-gradient(ellipse 40% 30% at 20% 70%, rgba(196, 92, 58, 0.12), transparent 55%),
+        radial-gradient(ellipse 40% 30% at 80% 75%, rgba(224, 182, 58, 0.1), transparent 55%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .finale-brand {
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      letter-spacing: 0.2em;
+      color: var(--moon);
+      text-indent: 0.2em;
+      margin-bottom: 1.5rem;
+      text-shadow:
+        0 0 30px rgba(255, 220, 140, 0.5),
+        0 0 60px rgba(224, 182, 58, 0.3);
+      animation: rise-in 1s var(--ease) both, brand-shine 5s linear 1s infinite;
+      background: linear-gradient(120deg, #fff8e0 0%, #f0d078 35%, #fff 50%, #e0b63a 70%, #fff4d0 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .finale.is-celebrate .finale-brand {
+      animation: rise-in 1s var(--ease) both, brand-shine 3s linear infinite, finale-pop 1.2s var(--ease);
+    }
+    @keyframes finale-pop {
+      0% { transform: scale(0.92); }
+      50% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
+    .finale-names {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1.5rem;
+      margin-bottom: 2rem;
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      letter-spacing: 0.35em;
+      color: var(--gold-soft);
+      text-indent: 0.35em;
+    }
+
+    .finale-names span {
+      position: relative;
+    }
+    .finale-names span:not(:last-child)::after {
+      content: "·";
+      position: absolute;
+      right: -1rem;
+      color: rgba(201, 162, 39, 0.4);
+    }
+
+    .finale-msg {
+      max-width: 28rem;
+      margin: 0 auto 2.5rem;
+      line-height: 2;
+      color: var(--mist);
+      letter-spacing: 0.08em;
+      font-size: 1.05rem;
+    }
+
+    .signature {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--gold-soft);
+      letter-spacing: 0.08em;
+    }
+
+    .finale-avatar {
+      display: block;
+      width: min(112px, 28vw);
+      height: auto;
+      margin: 1.1rem auto 0;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    .replay {
+      margin-top: 3rem;
+      background: none;
+      border: none;
+      color: var(--mist);
+      font-family: "Noto Serif SC", serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 6px;
+      text-decoration-color: rgba(201, 162, 39, 0.4);
+      transition: color .3s;
+    }
+    .replay:hover { color: var(--moon); }
+
+    /* Floating released lanterns layer */
+    #float-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 8;
+      overflow: hidden;
+    }
+
+    .float-lantern {
+      position: absolute;
+      bottom: -80px;
+      width: 36px;
+      animation: rise-lantern linear forwards;
+      opacity: 0.95;
+      filter: drop-shadow(0 0 12px rgba(232, 140, 60, 0.65));
+    }
+    .float-lantern .lantern-body { width: 100%; }
+    .float-lantern .lantern-string { height: 24px; }
+    .float-lantern .lantern-tail { height: 18px; }
+
+    /* Burst flash overlay */
+    .burst-flash {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--bx, 50%) var(--by, 30%), rgba(255, 230, 160, 0.35), transparent 42%);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .burst-flash.is-on { opacity: 1; }
+
+    @keyframes rise-lantern {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.9; }
+      100% { transform: translateY(-110vh) translateX(var(--drift, 40px)) rotate(12deg); opacity: 0; }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 1s var(--ease), transform 1s var(--ease);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="is-locked">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <canvas id="sky"></canvas>
+  <canvas id="fx"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="ambient-lanterns" aria-hidden="true"></div>
+  <div id="float-layer" aria-hidden="true"></div>
+  <div class="burst-flash" id="burstFlash" aria-hidden="true"></div>
+
+  <!-- Focus gate -->
+  <div id="gate" role="dialog" aria-label="对焦入场">
+    <div class="gate-inner">
+      <div class="iris" id="iris" role="button" tabindex="0" aria-label="长按光圈，对焦入场">
+        <div class="iris-soft" aria-hidden="true"></div>
+        <div class="iris-ring" aria-hidden="true"></div>
+        <div class="iris-ring iris-ring-2" aria-hidden="true"></div>
+        <div class="iris-moon" id="irisMoon" aria-hidden="true"></div>
+        <div class="iris-aperture" id="irisAperture" aria-hidden="true"></div>
+      </div>
+      <div class="gate-copy">
+        <p class="gate-kicker">FOCUS · 00</p>
+        <h1 class="gate-title">对准这一轮月</h1>
+        <p class="gate-hint">长按光圈，对焦入场</p>
+        <button type="button" class="gate-skip" id="gateSkip">跳过</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <!-- HERO -->
+    <header class="hero" id="top">
+      <div class="hero-atmosphere" aria-hidden="true"></div>
+      <div class="moon-wrap">
+        <div class="moon-beams" aria-hidden="true"></div>
+        <div class="moon-halo moon-halo-3" aria-hidden="true"></div>
+        <div class="moon-halo moon-halo-2" aria-hidden="true"></div>
+        <div class="moon-halo" aria-hidden="true"></div>
+        <div class="moon" id="moon" role="button" tabindex="0" aria-label="点击月亮放飞灯笼" title="点击放飞灯笼"></div>
+        <p class="moon-hint">点月亮 · 放花灯</p>
+      </div>
+      <div class="hero-content">
+        <p class="reunion-tag">人月两圆 · 灯火团圆</p>
+        <h1 class="brand">中秋</h1>
+        <div class="hero-line" aria-hidden="true"></div>
+        <!-- <p class="hero-title">谢谢叔叔阿姨和曦予</p> -->
+        <p class="hero-sub">月圆人安 · 在深圳遇见的第一份热忱</p>
+        <a class="cta" href="#story">
+          跟着月光往下走
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
+        </a>
+      </div>
+      <div class="scroll-cue" aria-hidden="true">
+        下滑
+        <span></span>
+      </div>
+    </header>
+
+    <!-- STORY -->
+    <section id="story">
+      <div class="story">
+        <div class="story-aside reveal">
+          <p class="section-label">Moonlight for the letter</p>
+          <h2 class="section-title">转一转月相</h2>
+          <p class="section-lead">转月相，调亮信上的光，把文字从夜色里唤出来。</p>
+          <div class="story-dial">
+            <div class="dial-wrap" id="dialWrap">
+              <div class="dial-face" id="dialFace"></div>
+              <div class="dial-ticks" aria-hidden="true"></div>
+              <div class="dial-knob" id="dialKnob" role="slider" aria-label="转动月相"><span id="dialDeg">0°</span></div>
+            </div>
+            <p class="dial-readout" id="dialReadout">新月 · 夜色最沉</p>
+            <div class="phase-pills" id="phasePills">
+              <button type="button" data-a="0">新月</button>
+              <button type="button" data-a="90">上弦</button>
+              <button type="button" data-a="180">满月</button>
+              <button type="button" data-a="270">下弦</button>
+            </div>
+          </div>
+        </div>
+        <article class="letter reveal" id="letter" aria-label="随月相亮起的信笺">
+          <div class="letter-mask" id="letterMask"></div>
+          <div class="letter-body">
+            <p>叔叔、阿姨、曦予：</p>
+            <p>中秋已至，月色将圆。一份真挚的问候，送给你们。</p>
+            <p>来深圳前后，心里其实有种<em>未知感</em>，不知身份转变之后，初入职场，生活会是什么样子。</p>
+            <p>你们的邀请，是我步入新阶段来深圳后<em>第一次被热情招待</em>。开心之外，更是说不清的温暖——仿佛这座离家千里的城市，忽然多了几分亲切。</p>
+            <p>愿今夜月圆，也照见你们安好。中秋快乐。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- LANTERNS -->
+    <section class="play" id="play">
+      <div class="play-inner">
+        <p class="section-label reveal">Lantern wishes</p>
+        <h2 class="section-title reveal">点一盏灯笼</h2>
+        <p class="section-lead reveal">点击灯笼，随机放飞一句祝愿，让它随灯升上夜空。</p>
+
+        <div class="lantern-stage" id="lanternStage">
+          <div class="wish-toast" id="wishToast"></div>
+          <!-- lanterns injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- MOONCAKES -->
+    <section>
+      <div class="mooncakes">
+        <p class="section-label reveal">Three mooncakes</p>
+        <h2 class="section-title reveal">拆开月饼</h2>
+        <p class="section-lead reveal" style="margin: 0 auto;">三块月饼，三份心意。点开看看藏着什么。</p>
+        <div class="cake-grid">
+          <button class="cake reveal" type="button" data-msg="愿叔叔阿姨身体康健，岁岁团圆。">
+            <div class="cake-pattern"><span>团</span></div>
+            <div class="cake-reveal">愿叔叔阿姨<br>身体康健，万事顺意🌈 </div>
+          </button>
+          <button class="cake reveal" type="button" data-msg="愿曦予万事顺意，心有明月。">
+            <div class="cake-pattern"><span>圆</span></div>
+            <div class="cake-reveal">祝曦予如曦初照<br>所予皆暖🌅</div>
+          </button>
+          <button class="cake reveal" type="button" data-msg="愿那次相聚的温度，长留彼此心间。">
+            <div class="cake-pattern"><span>暖</span></div>
+            <div class="cake-reveal">祝我自己中秋快乐<br>妙妙妙（画风突变）🌟</div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINALE -->
+    <section class="finale" id="finale">
+      <div>
+        <p class="section-label">Mid-Autumn · 2026</p>
+        <h2 class="finale-brand">中秋快乐</h2>
+        <div class="finale-names">
+          <!-- <span>叔叔</span>
+          <span>阿姨</span>
+          <span>曦予</span> -->
+        </div>
+        <p class="finale-msg">月圆人安，灯暖如初。谢谢大家，让我在深圳初入职场之际感到被热情接住🌻</p>
+        <p class="signature">—— 迪士尼在逃饼饼 （那只黄色厨师小狗）</p>
+        <img class="finale-avatar" src="img.jpeg" alt="迪士尼在逃饼饼" width="112" height="112" />
+        <button class="replay" type="button" id="replay">回到月下</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      /* —— Cursor —— */
+      const cursor = document.getElementById("cursor");
+      const cursorDot = document.getElementById("cursorDot");
+      let cx = 0, cy = 0, dx = 0, dy = 0;
+      const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+      if (canHover) {
+        window.addEventListener("mousemove", (e) => {
+          dx = e.clientX; dy = e.clientY;
+          cursorDot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%, -50%)`;
+        });
+        const loopCursor = () => {
+          cx += (dx - cx) * 0.18;
+          cy += (dy - cy) * 0.18;
+          cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+          requestAnimationFrame(loopCursor);
+        };
+        loopCursor();
+
+        document.querySelectorAll("a, button, .moon, .lantern, .cake, input, .iris, .gate-skip, .dial-knob").forEach((el) => {
+          el.addEventListener("mouseenter", () => cursor.classList.add("is-active"));
+          el.addEventListener("mouseleave", () => cursor.classList.remove("is-active"));
+        });
+      }
+
+      /* —— Focus gate —— */
+      const gate = document.getElementById("gate");
+      const iris = document.getElementById("iris");
+      const irisMoon = document.getElementById("irisMoon");
+      const irisAperture = document.getElementById("irisAperture");
+      let gateOpen = 0.72;
+      let gateHolding = false;
+      let gateDone = false;
+      let gateRaf = null;
+      let startFestive = null;
+
+      function setGateOpen(v) {
+        gateOpen = v;
+        const t = Math.min(1, (v - 0.72) / (1.35 - 0.72));
+        iris.style.setProperty("--open", String(v));
+        irisMoon.style.transform = `scale(${v})`;
+        // 光圈从偏左逐渐对准月心
+        irisAperture.style.left = (38 + t * 12) + "%";
+        irisAperture.style.top = (48 + t * 2) + "%";
+        irisAperture.style.width = (34 + t * 8) + "%";
+      }
+      setGateOpen(0.72);
+
+      function gateLoop() {
+        if (!gateHolding || gateDone) return;
+        setGateOpen(Math.min(1.35, gateOpen + 0.016));
+        if (gateOpen >= 1.32) finishGate();
+        else gateRaf = requestAnimationFrame(gateLoop);
+      }
+
+      function finishGate() {
+        if (gateDone) return;
+        gateDone = true;
+        gateHolding = false;
+        cancelAnimationFrame(gateRaf);
+        setGateOpen(1.35);
+        iris.classList.remove("is-holding");
+        document.body.classList.remove("is-locked");
+        if (typeof celebrate === "function") {
+          celebrate(window.innerWidth / 2, window.innerHeight * 0.38, true);
+        }
+        gate.classList.add("is-out");
+        if (typeof startFestive === "function") startFestive();
+      }
+
+      function startGateHold(e) {
+        e.preventDefault();
+        if (gateDone) return;
+        gateHolding = true;
+        iris.classList.add("is-holding");
+        gateLoop();
+      }
+      function endGateHold() {
+        gateHolding = false;
+        iris.classList.remove("is-holding");
+        cancelAnimationFrame(gateRaf);
+        if (!gateDone && gateOpen < 1.32) setGateOpen(0.72);
+      }
+
+      iris.addEventListener("pointerdown", startGateHold);
+      iris.addEventListener("pointerup", endGateHold);
+      iris.addEventListener("pointerleave", endGateHold);
+      iris.addEventListener("pointercancel", endGateHold);
+      iris.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          finishGate();
+        }
+      });
+      document.getElementById("gateSkip").addEventListener("click", finishGate);
+
+      /* —— Starfield + gold foil —— */
+      const canvas = document.getElementById("sky");
+      const ctx = canvas.getContext("2d");
+      const fxCanvas = document.getElementById("fx");
+      const fx = fxCanvas.getContext("2d");
+      let stars = [];
+      let foils = [];
+      let sparks = [];
+      let fireworks = [];
+      let w, h, mx = 0.5, my = 0.5;
+
+      const COLORS = [
+        "rgba(255,236,180,",
+        "rgba(224,182,58,",
+        "rgba(232,140,60,",
+        "rgba(255,210,140,",
+        "rgba(196,92,58,",
+        "rgba(247,236,212,",
+      ];
+
+      function resize() {
+        w = canvas.width = fxCanvas.width = window.innerWidth;
+        h = canvas.height = fxCanvas.height = window.innerHeight;
+        stars = Array.from({ length: Math.min(180, Math.floor(w * h / 8000)) }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.5 + 0.2,
+          a: Math.random(),
+          s: Math.random() * 0.025 + 0.005,
+          p: Math.random() * Math.PI * 2,
+          warm: Math.random() > 0.7,
+        }));
+        foils = Array.from({ length: Math.min(55, Math.floor(w / 28)) }, () => makeFoil());
+      }
+
+      function makeFoil() {
+        return {
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2.2 + 0.8,
+          vy: 0.25 + Math.random() * 0.55,
+          vx: (Math.random() - 0.5) * 0.4,
+          rot: Math.random() * Math.PI * 2,
+          vr: (Math.random() - 0.5) * 0.04,
+          c: COLORS[Math.floor(Math.random() * COLORS.length)],
+          a: 0.35 + Math.random() * 0.45,
+          shape: Math.random() > 0.5 ? "rect" : "dot",
+        };
+      }
+
+      resize();
+      window.addEventListener("resize", resize);
+      window.addEventListener("mousemove", (e) => {
+        mx = e.clientX / w;
+        my = e.clientY / h;
+      });
+
+      function burst(x, y, count = 48, power = 1) {
+        for (let i = 0; i < count; i++) {
+          const ang = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+          const spd = (2 + Math.random() * 4.5) * power;
+          sparks.push({
+            x, y,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd,
+            life: 1,
+            decay: 0.012 + Math.random() * 0.018,
+            r: 1.2 + Math.random() * 2.2,
+            c: COLORS[Math.floor(Math.random() * COLORS.length)],
+            g: 0.05 + Math.random() * 0.06,
+          });
+        }
+      }
+
+      function launchFirework(x, y) {
+        fireworks.push({
+          x,
+          y: h + 10,
+          tx: x,
+          ty: y,
+          vy: -(7 + Math.random() * 3),
+          trail: [],
+          exploded: false,
+          c: COLORS[Math.floor(Math.random() * 4)],
+        });
+      }
+
+      function celebrate(x, y, strong = false) {
+        burst(x, y, strong ? 72 : 42, strong ? 1.35 : 1);
+        if (strong) {
+          setTimeout(() => burst(x + (Math.random() - 0.5) * 80, y + (Math.random() - 0.5) * 40, 36, 0.9), 180);
+          setTimeout(() => burst(x + (Math.random() - 0.5) * 100, y + 30, 28, 0.75), 360);
+        }
+        flashAt(x, y);
+      }
+
+      const flashEl = document.getElementById("burstFlash");
+      function flashAt(x, y) {
+        flashEl.style.setProperty("--bx", (x / w * 100) + "%");
+        flashEl.style.setProperty("--by", (y / h * 100) + "%");
+        flashEl.classList.add("is-on");
+        setTimeout(() => flashEl.classList.remove("is-on"), 180);
+      }
+
+      function drawSky() {
+        ctx.clearRect(0, 0, w, h);
+        const ox = (mx - 0.5) * 18;
+        const oy = (my - 0.5) * 12;
+        for (const st of stars) {
+          st.p += st.s;
+          const alpha = 0.28 + Math.sin(st.p) * 0.4 * st.a;
+          ctx.beginPath();
+          ctx.arc(st.x + ox * st.r, st.y + oy * st.r, st.r, 0, Math.PI * 2);
+          ctx.fillStyle = st.warm
+            ? `rgba(255, 210, 140, ${alpha})`
+            : `rgba(247, 236, 212, ${alpha})`;
+          ctx.fill();
+        }
+        for (const f of foils) {
+          f.y += f.vy;
+          f.x += f.vx + Math.sin(f.y * 0.01) * 0.3;
+          f.rot += f.vr;
+          if (f.y > h + 10) {
+            f.y = -10;
+            f.x = Math.random() * w;
+          }
+          ctx.save();
+          ctx.translate(f.x, f.y);
+          ctx.rotate(f.rot);
+          ctx.fillStyle = f.c + f.a + ")";
+          if (f.shape === "rect") {
+            ctx.fillRect(-f.r, -f.r * 0.4, f.r * 2, f.r * 0.8);
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, f.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+        requestAnimationFrame(drawSky);
+      }
+      drawSky();
+
+      function drawFx() {
+        fx.clearRect(0, 0, w, h);
+
+        for (let i = fireworks.length - 1; i >= 0; i--) {
+          const fw = fireworks[i];
+          fw.y += fw.vy;
+          fw.vy += 0.08;
+          fw.trail.push({ x: fw.x, y: fw.y });
+          if (fw.trail.length > 10) fw.trail.shift();
+          for (let t = 0; t < fw.trail.length; t++) {
+            const tr = fw.trail[t];
+            fx.beginPath();
+            fx.arc(tr.x, tr.y, 1.5, 0, Math.PI * 2);
+            fx.fillStyle = fw.c + (t / fw.trail.length) * 0.6 + ")";
+            fx.fill();
+          }
+          if (!fw.exploded && (fw.vy >= -0.5 || fw.y <= fw.ty)) {
+            fw.exploded = true;
+            burst(fw.x, fw.y, 56, 1.15);
+            fireworks.splice(i, 1);
+          }
+        }
+
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const s = sparks[i];
+          s.x += s.vx;
+          s.y += s.vy;
+          s.vy += s.g;
+          s.vx *= 0.98;
+          s.life -= s.decay;
+          if (s.life <= 0) {
+            sparks.splice(i, 1);
+            continue;
+          }
+          fx.beginPath();
+          fx.arc(s.x, s.y, s.r * s.life, 0, Math.PI * 2);
+          fx.fillStyle = s.c + s.life + ")";
+          fx.fill();
+          if (s.life > 0.5) {
+            fx.beginPath();
+            fx.arc(s.x, s.y, s.r * s.life * 2.2, 0, Math.PI * 2);
+            fx.fillStyle = s.c + (s.life * 0.2) + ")";
+            fx.fill();
+          }
+        }
+        requestAnimationFrame(drawFx);
+      }
+      drawFx();
+
+      /* —— Ambient lanterns —— */
+      const ambient = document.getElementById("ambient-lanterns");
+      const ambientChars = ["月", "圆", "安", "福", "喜", "团", "暖"];
+
+      function spawnAmbientLantern() {
+        if (document.hidden) return;
+        const el = document.createElement("div");
+        el.className = "ambient-lantern";
+        const size = 18 + Math.random() * 22;
+        el.style.setProperty("--size", size + "px");
+        el.style.setProperty("--life", 11 + Math.random() * 10 + "s");
+        el.style.setProperty("--drift", (Math.random() * 120 - 60) + "px");
+        el.style.setProperty("--op", 0.28 + Math.random() * 0.25);
+        el.style.left = Math.random() * 92 + "%";
+        const ch = ambientChars[Math.floor(Math.random() * ambientChars.length)];
+        el.innerHTML = `
+          <div class="lantern-string"></div>
+          <div class="lantern-cap"></div>
+          <div class="lantern-body" data-char="${ch}"></div>
+          <div class="lantern-tail"></div>
+        `;
+        ambient.appendChild(el);
+        el.addEventListener("animationend", () => el.remove());
+      }
+
+      function ambientLoop() {
+        spawnAmbientLantern();
+        const next = 2800 + Math.random() * 2800;
+        setTimeout(ambientLoop, next);
+      }
+
+      startFestive = () => {
+        for (let i = 0; i < 3; i++) setTimeout(spawnAmbientLantern, i * 900);
+        setTimeout(ambientLoop, 4000);
+        setTimeout(() => {
+          celebrate(w * 0.72, h * 0.22, true);
+          for (let i = 0; i < 2; i++) {
+            setTimeout(() => spawnFloatLantern(["月", "圆"][i]), i * 280);
+          }
+        }, 400);
+      };
+
+      /* Periodic soft fireworks in sky (after gate) */
+      setInterval(() => {
+        if (!gateDone || document.hidden) return;
+        if (Math.random() > 0.55) return;
+        const x = w * (0.15 + Math.random() * 0.7);
+        const y = h * (0.12 + Math.random() * 0.28);
+        launchFirework(x, y);
+      }, 3200);
+
+      /* —— Scroll reveals —— */
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) en.target.classList.add("is-visible");
+        });
+      }, { threshold: 0.18 });
+
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+      const letter = document.getElementById("letter");
+      const letterMask = document.getElementById("letterMask");
+      let letterCelebrated = false;
+
+      function applyMoonlight(angleDeg) {
+        // 0° 新月：只亮开顶部一角；180° 满月：整封信亮起
+        const fullness = (1 - Math.cos((angleDeg * Math.PI) / 180)) / 2;
+        const reveal = Math.round(16 + fullness * 84); // 16% → 100%
+        const revealVal = reveal + "%";
+        document.documentElement.style.setProperty("--reveal", revealVal);
+        if (letter) letter.style.setProperty("--reveal", revealVal);
+        if (letterMask) letterMask.style.setProperty("--reveal", revealVal);
+
+        if (letter) {
+          if (fullness >= 0.97) {
+            letter.classList.add("is-full");
+            if (!letterCelebrated) {
+              letterCelebrated = true;
+              const rect = letter.getBoundingClientRect();
+              celebrate(w * 0.55, rect.top + 80, false);
+            }
+          } else {
+            letter.classList.remove("is-full");
+          }
+        }
+        return fullness;
+      }
+
+      /* Phase dial ↔ letter brightness */
+      const dialKnob = document.getElementById("dialKnob");
+      const dialFace = document.getElementById("dialFace");
+      const dialWrap = document.getElementById("dialWrap");
+      const dialReadout = document.getElementById("dialReadout");
+      const dialDeg = document.getElementById("dialDeg");
+      let dialAngle = 0;
+      let dialDragging = false;
+      const phases = [
+        { a: 0, name: "新月 · 夜色最沉", hue: 225 },
+        { a: 90, name: "上弦 · 银边初起", hue: 200 },
+        { a: 180, name: "满月 · 光华铺开", hue: 38 },
+        { a: 270, name: "下弦 · 余辉收束", hue: 260 },
+      ];
+
+      function setDialAngle(a, snap = false) {
+        dialAngle = ((a % 360) + 360) % 360;
+        if (snap) {
+          const nearest = phases.reduce((b, p) =>
+            Math.abs(p.a - dialAngle) < Math.abs(b.a - dialAngle) ? p : b
+          );
+          dialAngle = nearest.a;
+        }
+        if (dialFace) dialFace.style.setProperty("--angle", dialAngle + "deg");
+        if (dialKnob) dialKnob.style.transform = `rotate(${dialAngle}deg)`;
+        if (dialDeg) dialDeg.textContent = Math.round(dialAngle) + "°";
+        const phase = phases.reduce((b, p) =>
+          Math.abs(p.a - dialAngle) < Math.abs(b.a - dialAngle) ? p : b
+        );
+        if (dialReadout) dialReadout.textContent = phase.name;
+        document.documentElement.style.setProperty("--hue", phase.hue);
+        document.querySelectorAll("#phasePills button").forEach((b) =>
+          b.classList.toggle("on", +b.dataset.a === phase.a)
+        );
+        applyMoonlight(dialAngle);
+      }
+
+      function dialPointerAngle(e) {
+        const r = dialWrap.getBoundingClientRect();
+        const x = e.clientX - (r.left + r.width / 2);
+        const y = e.clientY - (r.top + r.height / 2);
+        let deg = Math.atan2(y, x) * (180 / Math.PI) + 90;
+        if (deg < 0) deg += 360;
+        return deg;
+      }
+
+      if (dialKnob && dialWrap) {
+        setDialAngle(0);
+        dialKnob.addEventListener("pointerdown", (e) => {
+          dialDragging = true;
+          dialKnob.setPointerCapture?.(e.pointerId);
+          setDialAngle(dialPointerAngle(e));
+        });
+        dialWrap.addEventListener("pointermove", (e) => {
+          if (!dialDragging) return;
+          setDialAngle(dialPointerAngle(e));
+        });
+        const endDialDrag = () => {
+          if (!dialDragging) return;
+          dialDragging = false;
+          setDialAngle(dialAngle, true);
+        };
+        dialWrap.addEventListener("pointerup", endDialDrag);
+        dialWrap.addEventListener("pointercancel", endDialDrag);
+        document.querySelectorAll("#phasePills button").forEach((btn) => {
+          btn.addEventListener("click", () => setDialAngle(+btn.dataset.a, true));
+        });
+      } else {
+        applyMoonlight(0);
+      }
+
+      const finale = document.getElementById("finale");
+      let finaleDone = false;
+      const finaleIo = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting || finaleDone) return;
+          finaleDone = true;
+          finale.classList.add("is-celebrate");
+          celebrate(w * 0.5, h * 0.4, true);
+          launchFirework(w * 0.3, h * 0.28);
+          launchFirework(w * 0.7, h * 0.25);
+          setTimeout(() => launchFirework(w * 0.5, h * 0.2), 400);
+          for (let i = 0; i < 4; i++) {
+            setTimeout(() => spawnFloatLantern(["团", "圆", "喜", "月"][i]), i * 280);
+          }
+        });
+      }, { threshold: 0.45 });
+      finaleIo.observe(finale);
+
+      /* —— Lanterns —— */
+      const wishes = [
+        { char: "安", text: "愿家人安康，月下无忧" },
+        { char: "圆", text: "愿人月两圆，岁岁相伴" },
+        { char: "暖", text: "愿相聚的温度，常在心间" },
+        { char: "福", text: "愿福气满堂，灯火长明" },
+        { char: "喜", text: "愿笑意如月，清辉不减" },
+        { char: "宁", text: "愿心境澄明，岁静人安" },
+      ];
+
+      const stage = document.getElementById("lanternStage");
+      const toast = document.getElementById("wishToast");
+      const floatLayer = document.getElementById("float-layer");
+
+      function createLanternEl(item, leftPct, delay, dur) {
+        const el = document.createElement("div");
+        el.className = "lantern";
+        el.style.left = leftPct + "%";
+        el.style.setProperty("--delay", delay + "s");
+        el.style.setProperty("--dur", dur + "s");
+        el.innerHTML = `
+          <div class="lantern-string"></div>
+          <div class="lantern-cap"></div>
+          <div class="lantern-body" data-char="${item.char}"></div>
+          <div class="lantern-tail"></div>
+        `;
+        el.addEventListener("click", () => releaseLantern(el, item.text));
+        return el;
+      }
+
+      function layoutLanterns() {
+        stage.querySelectorAll(".lantern").forEach((n) => n.remove());
+        const count = window.innerWidth < 560 ? 4 : 6;
+        wishes.slice(0, count).forEach((wItem, i) => {
+          const left = 8 + (i / (count - 1)) * 78;
+          stage.appendChild(createLanternEl(wItem, left, i * 0.35, 3.5 + (i % 3) * 0.6));
+        });
+      }
+      layoutLanterns();
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__lanternResize);
+        window.__lanternResize = setTimeout(layoutLanterns, 200);
+      });
+
+      let toastTimer;
+      function showToast(text) {
+        toast.textContent = text;
+        toast.classList.add("is-show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("is-show"), 2200);
+      }
+
+      function releaseLantern(el, text) {
+        if (el.classList.contains("is-released")) return;
+        el.classList.add("is-released");
+        showToast(text);
+        const rect = el.getBoundingClientRect();
+        celebrate(rect.left + rect.width / 2, rect.top, false);
+        spawnFloatLantern(el.querySelector(".lantern-body")?.dataset.char || "月");
+        setTimeout(() => {
+          if (el.parentNode) el.remove();
+        }, 4500);
+      }
+
+      function spawnFloatLantern(char = "月") {
+        const fl = document.createElement("div");
+        fl.className = "float-lantern";
+        fl.style.left = 10 + Math.random() * 80 + "%";
+        fl.style.setProperty("--drift", (Math.random() * 80 - 40) + "px");
+        fl.style.animationDuration = 6 + Math.random() * 4 + "s";
+        fl.innerHTML = `
+          <div class="lantern-string"></div>
+          <div class="lantern-cap"></div>
+          <div class="lantern-body" data-char="${char}"></div>
+          <div class="lantern-tail"></div>
+        `;
+        floatLayer.appendChild(fl);
+        fl.addEventListener("animationend", () => fl.remove());
+      }
+
+      /* Moon click */
+      const moon = document.getElementById("moon");
+      function moonRelease() {
+        moon.classList.remove("is-burst");
+        void moon.offsetWidth;
+        moon.classList.add("is-burst");
+        const rect = moon.getBoundingClientRect();
+        const mx0 = rect.left + rect.width / 2;
+        const my0 = rect.top + rect.height / 2;
+        celebrate(mx0, my0, true);
+        launchFirework(mx0 - 60, my0 - 40);
+        launchFirework(mx0 + 70, my0 - 20);
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => spawnFloatLantern(["月", "圆", "安"][i]), i * 220);
+        }
+        showToast("月圆人安 · 灯暖如初");
+        toast.style.position = "fixed";
+        toast.style.top = "50%";
+        toast.style.left = "50%";
+        toast.style.zIndex = "20";
+        setTimeout(() => {
+          toast.style.position = "";
+          toast.style.top = "";
+          toast.style.left = "";
+          toast.style.zIndex = "";
+        }, 2400);
+      }
+      moon.addEventListener("click", moonRelease);
+      moon.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); moonRelease(); }
+      });
+
+      /* Mooncakes */
+      document.querySelectorAll(".cake").forEach((cake) => {
+        cake.addEventListener("click", () => {
+          cake.classList.toggle("is-open");
+          if (cake.classList.contains("is-open")) {
+            const rect = cake.getBoundingClientRect();
+            celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2, true);
+            spawnFloatLantern("圆");
+          }
+        });
+      });
+
+      /* Replay */
+      document.getElementById("replay").addEventListener("click", () => {
+        finaleDone = false;
+        finale.classList.remove("is-celebrate");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => celebrate(w * 0.72, h * 0.22, true), 600);
+      });
+    })();
+  </script>
+</body>
+</html>
