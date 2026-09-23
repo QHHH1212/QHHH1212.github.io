@@ -829,11 +829,27 @@
       bottom: 8%;
       width: 52px;
       cursor: pointer;
+      transform: translateX(-50%);
       transform-origin: top center;
       animation: sway var(--dur, 4s) ease-in-out infinite;
       animation-delay: var(--delay, 0s);
       transition: filter .3s;
       z-index: 2;
+    }
+    @media (max-width: 560px) {
+      .lantern-stage {
+        height: clamp(280px, 70vw, 360px);
+        padding: 0 0.25rem;
+      }
+      .lantern {
+        width: 34px;
+        bottom: 6%;
+      }
+      .lantern-body::after {
+        font-size: 0.85rem;
+      }
+      .lantern-string { height: 28px; }
+      .lantern-tail { height: 18px; }
     }
     .lantern:hover { filter: brightness(1.15); z-index: 3; }
     .lantern.is-released {
@@ -896,12 +912,12 @@
     }
 
     @keyframes sway {
-      0%, 100% { transform: rotate(-4deg) translateY(0); }
-      50% { transform: rotate(4deg) translateY(-8px); }
+      0%, 100% { transform: translateX(-50%) rotate(-4deg) translateY(0); }
+      50% { transform: translateX(-50%) rotate(4deg) translateY(-8px); }
     }
     @keyframes float-away {
-      0% { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-420px) scale(0.6); }
+      0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-420px) scale(0.6); }
     }
 
     .wish-toast {
@@ -1852,9 +1868,11 @@
 
       function layoutLanterns() {
         stage.querySelectorAll(".lantern").forEach((n) => n.remove());
-        const count = window.innerWidth < 560 ? 4 : 6;
+        const count = 6;
+        const edge = window.innerWidth < 560 ? 5 : 8;
+        const span = 100 - edge * 2;
         wishes.slice(0, count).forEach((wItem, i) => {
-          const left = 8 + (i / (count - 1)) * 78;
+          const left = edge + (i / (count - 1)) * span;
           stage.appendChild(createLanternEl(wItem, left, i * 0.35, 3.5 + (i % 3) * 0.6));
         });
       }
