@@ -583,6 +583,58 @@
       color: var(--pink-hot);
     }
 
+    /* music toggle */
+    .bgm-btn {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 10000;
+      max-width: min(78vw, 280px);
+      border: 3px solid var(--ink);
+      background: linear-gradient(180deg, #fff 0%, var(--pink-soft) 100%);
+      color: var(--ink);
+      font-family: "ZCOOL KuaiLe", cursive;
+      font-size: 0.95rem;
+      line-height: 1.35;
+      padding: 0.55rem 0.85rem;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 var(--ink);
+      text-align: left;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .bgm-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .bgm-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .bgm-btn .bgm-ico {
+      display: inline-block;
+      margin-right: 0.25rem;
+      font-family: "Press Start 2P", monospace;
+      font-size: 0.55rem;
+      color: var(--pink-hot);
+      vertical-align: middle;
+    }
+
+    .bgm-btn.is-playing {
+      background: linear-gradient(180deg, #fff 0%, #c9fff3 100%);
+    }
+
+    .bgm-btn.is-playing .bgm-ico {
+      animation: musicPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes musicPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.15); }
+    }
+
     /* confetti canvas */
     #confetti {
       position: fixed;
@@ -594,11 +646,23 @@
     @media (max-width: 520px) {
       .hero-moon { width: 52px; height: 52px; top: 5%; right: 5%; }
       .shun-chrome { font-size: 0.36rem; }
+      .bgm-btn {
+        right: 0.65rem;
+        bottom: 0.65rem;
+        font-size: 0.88rem;
+        padding: 0.45rem 0.7rem;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <audio id="bgm" src="moon.mp3" loop preload="auto" playsinline></audio>
+  <button type="button" class="bgm-btn is-playing" id="bgmBtn" aria-pressed="true" title="点击静音">
+    <span class="bgm-ico" aria-hidden="true">♪</span>
+    <span id="bgmLabel">我们望向《一样的月光》</span>
+  </button>
 
   <div class="float-layer" aria-hidden="true">
     <svg class="float-cat pixel" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><use href="#a1"/></svg>
@@ -1205,6 +1269,61 @@
 
   <script>
     (function () {
+      // background music · moon.mp3（默认播放）
+      var bgm = document.getElementById("bgm");
+      var bgmBtn = document.getElementById("bgmBtn");
+      var bgmLabel = document.getElementById("bgmLabel");
+      var TEXT_PLAY = "我们望向《一样的月光》";
+      var TEXT_MUTE = "捏住嘴巴";
+      var userMuted = false;
+
+      function setBgmUI(playing) {
+        bgmLabel.textContent = playing ? TEXT_PLAY : TEXT_MUTE;
+        bgmBtn.classList.toggle("is-playing", playing);
+        bgmBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+        bgmBtn.title = playing ? "点击静音" : "点击播放";
+      }
+
+      function playBgm() {
+        if (userMuted) return;
+        bgm.muted = false;
+        bgm.volume = 0.55;
+        var p = bgm.play();
+        if (p && typeof p.then === "function") {
+          p.then(function () { setBgmUI(true); })
+           .catch(function () { setBgmUI(true); });
+        } else {
+          setBgmUI(true);
+        }
+      }
+
+      function muteBgm() {
+        userMuted = true;
+        bgm.muted = true;
+        bgm.pause();
+        setBgmUI(false);
+      }
+
+      bgmBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (userMuted || bgm.paused || bgm.muted) {
+          userMuted = false;
+          playBgm();
+        } else {
+          muteBgm();
+        }
+      });
+
+      setBgmUI(true);
+      playBgm();
+
+      // 浏览器拦截自动播放时，首次点击页面再接着播
+      function unlockBgm() {
+        if (!userMuted) playBgm();
+      }
+      document.addEventListener("click", unlockBgm, { once: true });
+      document.addEventListener("touchstart", unlockBgm, { once: true });
+
       // click to reveal shun.jpg
       var poster = document.getElementById("shunPoster");
       var art = document.getElementById("shunArt");
