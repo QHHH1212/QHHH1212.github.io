@@ -1219,6 +1219,130 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* —— BGM control —— */
+    .bgm-toggle {
+      position: fixed;
+      left: 1rem;
+      bottom: 1.1rem;
+      z-index: 45;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.4rem 0.8rem 0.4rem 0.4rem;
+      border: 1px solid var(--line);
+      background: rgba(10, 18, 32, 0.78);
+      backdrop-filter: blur(8px);
+      color: var(--moon);
+      font-family: "Noto Serif SC", serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: border-color .3s, background .3s;
+    }
+    .bgm-toggle:hover {
+      border-color: var(--gold-soft);
+      background: rgba(16, 26, 42, 0.9);
+    }
+    .bgm-player {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      position: relative;
+      border-radius: 4px;
+      background:
+        linear-gradient(145deg, #3a2a1c 0%, #24180f 55%, #1a120c 100%);
+      box-shadow: inset 0 0 0 1px rgba(224, 182, 58, 0.2);
+    }
+    .bgm-disc {
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%,
+          #fff4d0 0 3px,
+          #c9a227 3px 5.5px,
+          #8a6a22 5.5px 6.5px,
+          transparent 6.5px),
+        repeating-radial-gradient(circle at 50% 50%,
+          #e8c96a 0 1.2px,
+          #c4a035 1.2px 2.4px);
+      box-shadow:
+        0 1px 4px rgba(0,0,0,0.4),
+        0 0 8px rgba(224, 182, 58, 0.35),
+        inset 0 0 0 1px rgba(255, 244, 200, 0.35);
+    }
+    .bgm-arm {
+      position: absolute;
+      right: 3px;
+      top: 4px;
+      width: 2px;
+      height: 16px;
+      background: linear-gradient(180deg, #e0c070, #a8843a);
+      border-radius: 1px;
+      transform-origin: 50% 0;
+      transform: rotate(28deg);
+      transition: transform .35s var(--ease);
+      z-index: 2;
+      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.35);
+    }
+    .bgm-arm::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      margin-left: -2.5px;
+      border-radius: 50%;
+      background: #c9a45a;
+    }
+    .bgm-arm::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      width: 4px;
+      height: 3px;
+      margin-left: -1px;
+      background: #8a8a8a;
+      border-radius: 0 0 1px 1px;
+      transform: rotate(-20deg);
+    }
+    .bgm-toggle.is-playing .bgm-disc {
+      animation: disc-spin 3.2s linear infinite;
+    }
+    .bgm-toggle.is-muted .bgm-arm {
+      transform: rotate(-12deg);
+    }
+    .bgm-toggle.is-muted .bgm-disc {
+      animation: none;
+      filter: brightness(0.7) saturate(0.75);
+    }
+    @keyframes disc-spin { to { transform: rotate(360deg); } }
+    .bgm-label {
+      white-space: nowrap;
+      max-width: 11.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--mist);
+    }
+    .bgm-toggle.is-playing .bgm-label { color: var(--gold-soft); }
+    @media (max-width: 560px) {
+      .bgm-toggle {
+        left: 0.65rem;
+        bottom: 0.75rem;
+        font-size: 0.7rem;
+        padding: 0.35rem 0.6rem 0.35rem 0.35rem;
+        gap: 0.55rem;
+      }
+      .bgm-player { width: 32px; height: 32px; }
+      .bgm-disc { width: 26px; height: 26px; left: 3px; top: 3px; }
+      .bgm-label { max-width: 9.5rem; }
+    }
   </style>
 </head>
 <body class="is-locked">
@@ -1230,6 +1354,15 @@
   <div id="ambient-lanterns" aria-hidden="true"></div>
   <div id="float-layer" aria-hidden="true"></div>
   <div class="burst-flash" id="burstFlash" aria-hidden="true"></div>
+
+  <audio id="bgm" src="桂花香.mp3" loop preload="auto"></audio>
+  <button type="button" class="bgm-toggle is-playing" id="bgmToggle" aria-pressed="true" aria-label="背景音乐开关">
+    <span class="bgm-player" aria-hidden="true">
+      <span class="bgm-disc"></span>
+      <span class="bgm-arm"></span>
+    </span>
+    <span class="bgm-label" id="bgmLabel">满庭萦绕《桂花香》</span>
+  </button>
 
   <!-- Focus gate -->
   <div id="gate" role="dialog" aria-label="对焦入场">
@@ -1266,7 +1399,7 @@
         <p class="reunion-tag">人月两圆 · 灯火团圆</p>
         <h1 class="brand">中秋</h1>
         <div class="hero-line" aria-hidden="true"></div>
-        <!-- <p class="hero-title">谢谢叔叔阿姨和曦予</p> -->
+        <!-- <p class="hero-title">谢谢叔叔阿姨和馨予</p> -->
         <p class="hero-sub">月圆人安 · 在深圳遇见的第一份热忱</p>
         <a class="cta" href="#story">
           跟着月光往下走
@@ -1304,7 +1437,7 @@
         <article class="letter reveal" id="letter" aria-label="随月相亮起的信笺">
           <div class="letter-mask" id="letterMask"></div>
           <div class="letter-body">
-            <p>叔叔、阿姨、曦予：</p>
+            <p>叔叔、阿姨、馨予：</p>
             <p>中秋已至，月色将圆。一份真挚的问候，送给你们🎑</p>
             <p>来深圳前后，心里其实有种<em>未知感</em>，不知身份转变之后，初入职场，生活会是什么样子。</p>
             <p>你们的邀请，是我步入新阶段来深圳后<em>第一次被热情招待</em>。开心之外，更是说不清的温暖——仿佛这座离家千里的城市，忽然多了几分亲切。</p>
@@ -1339,9 +1472,9 @@
             <div class="cake-pattern"><span>团</span></div>
             <div class="cake-reveal">愿叔叔阿姨<br>身体康健，万事顺意🌈 </div>
           </button>
-          <button class="cake reveal" type="button" data-msg="愿曦予万事顺意，心有明月。">
+          <button class="cake reveal" type="button" data-msg="愿馨予万事顺意，心有明月。">
             <div class="cake-pattern"><span>圆</span></div>
-            <div class="cake-reveal">祝曦予如曦初照<br>所予皆暖🌅</div>
+            <div class="cake-reveal">祝馨予如兰生馨<br>所予皆安💐</div>
           </button>
           <button class="cake reveal" type="button" data-msg="愿那次相聚的温度，长留彼此心间。">
             <div class="cake-pattern"><span>暖</span></div>
@@ -1359,7 +1492,7 @@
         <div class="finale-names">
           <!-- <span>叔叔</span>
           <span>阿姨</span>
-          <span>曦予</span> -->
+          <span>馨予</span> -->
         </div>
         <p class="finale-msg">月圆人安，灯暖如初。谢谢大家，让我在深圳初入职场之际感到被热情接住🌻</p>
         <p class="signature">—— 迪士尼在逃饼饼 （那只黄色厨师小狗）</p>
@@ -1390,11 +1523,61 @@
         };
         loopCursor();
 
-        document.querySelectorAll("a, button, .moon, .lantern, .cake, input, .iris, .gate-skip, .dial-knob").forEach((el) => {
+        document.querySelectorAll("a, button, .moon, .lantern, .cake, input, .iris, .gate-skip, .dial-knob, .bgm-toggle").forEach((el) => {
           el.addEventListener("mouseenter", () => cursor.classList.add("is-active"));
           el.addEventListener("mouseleave", () => cursor.classList.remove("is-active"));
         });
       }
+
+      /* —— BGM —— */
+      const bgm = document.getElementById("bgm");
+      const bgmToggle = document.getElementById("bgmToggle");
+      const bgmLabel = document.getElementById("bgmLabel");
+      let bgmWantOn = true;
+
+      function setBgmUi(playing) {
+        bgmToggle.classList.toggle("is-playing", playing);
+        bgmToggle.classList.toggle("is-muted", !playing);
+        bgmToggle.setAttribute("aria-pressed", playing ? "true" : "false");
+        bgmLabel.textContent = playing ? "满庭萦绕《桂花香》" : "捏住嘴巴";
+      }
+
+      function tryPlayBgm() {
+        if (!bgmWantOn || !bgm) return Promise.resolve();
+        bgm.volume = 0.55;
+        return bgm.play().then(() => {
+          setBgmUi(true);
+        }).catch(() => {
+          // 仍显示播放态文案；真正出声等用户第一次交互
+          bgmToggle.classList.add("is-playing");
+          bgmToggle.classList.remove("is-muted");
+          bgmLabel.textContent = "满庭萦绕《桂花香》";
+        });
+      }
+
+      function pauseBgm() {
+        if (!bgm) return;
+        bgm.pause();
+        setBgmUi(false);
+      }
+
+      bgmToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (bgmWantOn && !bgm.paused) {
+          bgmWantOn = false;
+          pauseBgm();
+        } else {
+          bgmWantOn = true;
+          tryPlayBgm();
+        }
+      });
+
+      tryPlayBgm();
+      const unlockBgm = () => {
+        if (bgmWantOn && bgm.paused) tryPlayBgm();
+      };
+      document.addEventListener("pointerdown", unlockBgm, { passive: true });
+      document.addEventListener("touchstart", unlockBgm, { passive: true });
 
       /* —— Focus gate —— */
       const gate = document.getElementById("gate");
@@ -1439,6 +1622,7 @@
         }
         gate.classList.add("is-out");
         if (typeof startFestive === "function") startFestive();
+        if (bgmWantOn) tryPlayBgm();
       }
 
       function startGateHold(e) {
